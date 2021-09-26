@@ -14,7 +14,6 @@ def adduser(username, password):
     
 
 def addprice(user, station, price1, price2, price3):
-
     sql = "INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price) VALUES (:station, :user, NOW(), TRUE, :price1, :price2, :price3);"
     db.session.execute(sql,{"station":station, "user":user, "price1":price1, "price2":price2, "price3":price3})
     db.session.commit()
@@ -47,7 +46,7 @@ def getstations():
     return result.fetchall()
 
 def getprices():
-    sql = "SELECT S.station_name, S.id, P.type1_price, P.type1_price, P.type3_price, P.time  FROM prices P, stations S WHERE S.id = P.station_id ORDER BY time DESC LIMIT 20;"
+    sql = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.time FROM prices P, stations S WHERE S.id = P.station_id ORDER BY time DESC LIMIT 20;"
     result = db.session.execute(sql)
     return result.fetchall()
 

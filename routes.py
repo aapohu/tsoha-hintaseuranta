@@ -1,7 +1,6 @@
 import werkzeug.security
 from app import app
 import flask
-from random import randint
 import db
 
 
@@ -12,7 +11,7 @@ def index():
         print(db.isadmin(flask.session["username"]))
         print(db.getuser(flask.session["username"]))
     
-    return flask.render_template("index.html",message = hello(), prices = db.getprices())
+    return flask.render_template("index.html", prices = db.getprices())
 
 
 @app.route("/login",methods=["POST"])
@@ -97,6 +96,7 @@ def register():
     username = flask.request.form["username"]
     password1 = flask.request.form["password1"]
     password2 = flask.request.form["password2"]
+
     if db.isuser(username):
         return flask.render_template("error.html",message = "Käyttäjätunnus on jo varattu. Valitse jokin muu tunnus!")
 
@@ -109,10 +109,6 @@ def register():
         return flask.render_template("error.html",message = "Salasanat eivät olleet samat. Olehan tarkkana.")
 
         
-
-
-
-
 @app.route("/test")
 def test():
     data = db.isuser("BOSS")

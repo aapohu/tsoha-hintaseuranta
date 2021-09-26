@@ -1,8 +1,13 @@
+<html>
+<style>
+    table, th, td {
+        border:1px solid black;
+    }
+</style>
 {% extends "layout.html" %}
 {% block title %}Etusivu{% endblock %}
 
 {% block content %}
-<p>{{ message }}</p>
 
 {% if session.username %}
 <p>Terve {{ session.username }}</p>
@@ -15,8 +20,26 @@
 <input type="submit" value="Kirjaudu">
 </form>
 {% endif %}
-<p>Viimeisimmät hinnat:</p>
+<p>Viimeisimmät hintahavainnot:</p>
+<table>
+    <tr>
+      <th>Asema</th>
+      <th>95 E10</th>
+      <th>98 E5</th>
+      <th>Diesel</th>
+      <th>pvm.</th>
+    </tr>
+
 {% for price in prices %}
-<li>{{ price }}</li>
-{% endfor %}
+    <tr>
+      <td>{{ price[0] }}</td>
+      <td>{{ price[2] }}</td>
+      <td>{{ price[3] }}</td>
+      <td>{{ price[4] }}</td>
+      <td>{{ price[5] }}</td>
+    </tr>
+
+    {% endfor %}
+</table>
 {% endblock %}
+</html>
