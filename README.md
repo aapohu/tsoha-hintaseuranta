@@ -2,7 +2,12 @@
 Tavoitteena on luoda [Polttoaine.netin](https://www.polttoaine.net) kaltainen hintatilastointisovellus, jossa käyttäjät ilmoittavat polttoaineiden hintoja eri jälleenmyyjillä.
 Käyttäjät ovat joko tavallisia käyttäjiä tai ylläpitäjiä.
 
-Tilanne 26.9.
+**Tilanne 26.9.**
+
+Sovelluksen koekäyttö [Herokussa](https://aapohu-hintaseuranta.herokuapp.com/)
+Toistaiseksi sovellus näyttää vain kaikki tuoreimmat havainnot. 
+Sisäänkirjautunut käyttäjä voi lisätä hintahavainnon "Lisää havainto"-linkin kautta. Hintaa lisätessä tulee manuaalisesti valita aseman numero alla olevasta listasta. 
+Uuden aseman voi lisätä kirjautumalla sisään adminiksi (tunnus BOSS salasana pomo) ja menemällä urliin "/addstation", josta löytyvästä lomakkeesta aseman voi lisätä. Kenttään Tie tulee laittaa pieninumeroisin järkevän lähellä oleva tie.
 
 Käyttäjä voi: 
 - Rekisteröityä (valmis)
@@ -18,3 +23,5 @@ Ylläpitäjä voi:
   - Lisätä/poistaa asemia (lisääminen toimii)
   - Poistaa käyttäjiä 
   - Poistaa havaintoja 
+
+
