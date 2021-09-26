@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Lisää havainto{% endblock %}
+
+{% block content %}
+Jos asema ei myy jotain polttoainetta laita hinnaksi "0.0"
+<br>
+
+<form action="/addprice" method="POST">
+    Aseman numero <input type="text" name="station_number">
+    hinta 1(95)<input type="text" name="price1">
+    hinta 2(98)<input type="text" name="price2">
+    hinta 3(D)<input type="text" name="price3">
+    <input type="submit" value="Lisää">
+    </form>
+
+    Asemat:
+    <hr>
+    {% for station in stations %}
+    {{ station }}
+   
+    <hr>
+    {% endfor %}
+
+{% endblock %}

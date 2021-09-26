@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block title %}Rekisteröidy{% endblock %}
+{% block content%}
+{% if session.username %}
+
+{% else %}
+<p>Rekisteröityminen</p>
+<form action="/register" method="POST">
+    Käyttäjätunnus <input type="text" name="username"><br>
+    Salasana <input type="password" name="password1"><br>
+    Salasana uudelleen <input type="password" name="password2"><br>
+    <input type="submit" value="Rekisteröidy">
+    </form>
+{% endif %}
+{% endblock %}

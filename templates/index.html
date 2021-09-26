@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+
+{% block content %}
+<p>{{ message }}</p>
+
+{% if session.username %}
+<p>Terve {{ session.username }}</p>
+{% else %}
+<b>Kirjaudu sisään</b> <a href="/newuser"> <b>Rekisteröidy</b></a> 
+
+<form action="/login" method="POST">
+<input type="text" name="username">
+<input type="password" name="password">
+<input type="submit" value="Kirjaudu">
+</form>
+{% endif %}
+<p>Viimeisimmät hinnat:</p>
+{% for price in prices %}
+<li>{{ price }}</li>
+{% endfor %}
+{% endblock %}
