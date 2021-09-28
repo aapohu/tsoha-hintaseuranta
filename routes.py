@@ -11,7 +11,7 @@ def index():
         print(db.isadmin(flask.session["username"]))
         print(db.getuser(flask.session["username"]))
     
-    return flask.render_template("index.html", prices = db.getprices())
+    return flask.render_template("index.html", prices = db.getprices(), chats = db.getchatmessages())
 
 
 @app.route("/login",methods=["POST"])
@@ -107,6 +107,14 @@ def register():
         return flask.redirect("/")
     else:
         return flask.render_template("error.html",message = "Salasanat eivät olleet samat. Olehan tarkkana.")
+
+
+@app.route("/chatmessage", methods=["POST"])
+def chatmessage():
+    user = db.getuser(flask.session["username"])
+    message = flask.request.form["message"]
+    db.postchatmessage(user, message)
+    return flask.redirect("/")
 
         
 @app.route("/test")

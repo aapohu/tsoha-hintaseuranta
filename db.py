@@ -78,6 +78,18 @@ def getpassword(username):
     return value[0]
 
 
+def postchatmessage(username, message):
+    sql = "INSERT INTO chat (sender_id, message, time) VALUES (:username, :message, NOW());"
+    db.session.execute(sql,{"username":username, "message":message})
+    db.session.commit()
+
+
+def getchatmessages():
+    sql = "SELECT C.message, U.username, C.time FROM chat C, users U WHERE U.id = C.sender_id ORDER BY time DESC LIMIT 7;"
+    result = db.session.execute(sql)
+    return result
+
+
 
 
 

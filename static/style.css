@@ -1,0 +1,19 @@
+table.table1, table.table1 tr, table.table1 th, table.table1 td{
+    border:1px solid black;
+    padding: 2px;
+}
+
+table.table2{
+    border:1px solid black;
+    width:44%;
+    
+}
+table.table2 td{
+    color:green;
+}
+table.table2 tr{
+    color:grey;
+}
+p {
+    color:blueviolet;
+}

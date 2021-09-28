@@ -1,9 +1,6 @@
+
 <html>
-<style>
-    table, th, td {
-        border:1px solid black;
-    }
-</style>
+
 {% extends "layout.html" %}
 {% block title %}Etusivu{% endblock %}
 
@@ -21,7 +18,8 @@
 </form>
 {% endif %}
 <p>Viimeisimmät hintahavainnot:</p>
-<table>
+
+<table class="table1">
     <tr>
       <th>Asema</th>
       <th>95 E10</th>
@@ -41,5 +39,24 @@
 
     {% endfor %}
 </table>
+
+Chat <br>
+<table class="table2">
+
+{% for msg in chats %}
+
+    <tr>
+        <td>{{ msg[1] }}</td>           <td>{{ msg[0] }}</td>           <td>{{ msg[2].strftime("%d.%m.%y %H:%M") }}</td>
+    </tr>
+    <br>
+
+{% endfor %}
+</table>
+{% if session.username %}
+<form action="chatmessage" method="POST">
+    <input type="textfield" name="message">
+    <input type="submit" value="Lähetä">
+    </form>
+{% endif %}
 {% endblock %}
 </html>
