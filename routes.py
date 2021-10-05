@@ -4,6 +4,7 @@ import flask
 import db
 
 
+
 @app.route("/")
 def index():
     if(flask.session):
@@ -19,9 +20,16 @@ def login():
     username = flask.request.form["username"]
     password = flask.request.form["password"]
     if db.isuser(username):
+        user_id = db.getuser(username)
         hash = db.getpassword(username)
         if werkzeug.security.check_password_hash(hash, password):
             flask.session["username"] = username
+            flask.session["user_id"] = user_id
+            if db.isadmin(username):
+                flask.session["role"] = "admin"
+            else:
+                flask.session["role"] = "user"
+
             print("User", username, "logged in.")
             return flask.redirect("/")
         else:
@@ -32,7 +40,12 @@ def login():
 @app.route("/logout")
 def logout():
     username = flask.session["username"]
+    
     del flask.session["username"]
+    del flask.session["role"]
+    del flask.session["user_id"]
+
+
     print("User", username, "logged out.")
     return flask.redirect("/")
 
@@ -43,10 +56,10 @@ def error():
 
 @app.route("/addstation")
 def addstation():
-    if db.isadmin(flask.session["username"]):
-        return flask.render_template("addstation.html")
-    else:
-        return flask.redirect("/")
+    #if db.isadmin(flask.session["username"]):
+    return flask.render_template("addstation.html",requests=db.getrequests())
+    #else:
+    #   return flask.redirect("/")
 
 @app.route("/newstation",methods=["POST"])
 def newstation():
@@ -111,17 +124,28 @@ def register():
 
 @app.route("/chatmessage", methods=["POST"])
 def chatmessage():
-    user = db.getuser(flask.session["username"])
-    message = flask.request.form["message"]
-    db.postchatmessage(user, message)
+    if flask.session:
+        user = db.getuser(flask.session["username"])
+        message = flask.request.form["message"]
+        db.postchatmessage(user, message)
     return flask.redirect("/")
 
-        
-@app.route("/test")
-def test():
-    data = db.isuser("BOSS")
-    print(data)
-    return flask.render_template("test.html", message = data)
+@app.route("/requeststation", methods=["POST"])
+def requeststation():
+    if flask.session:
+        user = flask.session["user_id"]
+        message = flask.request.form["message"]
+        db.addrequest(user,message)
+    return flask.redirect("/")
+
+@app.route("/hiderequest", methods = ["POST"])
+def hiderequest():
+    if flask.session["role"] == "admin":
+        request_id = flask.request.form["request_id"]
+        db.hiderequest(request_id)
+        return flask.redirect("/addstation")
+    else:
+        return flask.redirect("/")
 
 def hello():
     return "onnennumero: " + str(randint(0,100))

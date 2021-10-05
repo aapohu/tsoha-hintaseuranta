@@ -1,7 +1,10 @@
 <!doctype html>
 <link rel="stylesheet" href="static/style.css"> 
 <title>nafta.net - {% block title %}{% endblock %}</title>
-<a href="/">Etusivu</a>  <a href="/newprice">Lisää havainto</a> {% if session.username %}<a href="/logout">Kirjaudu ulos</a> {% endif%}
+<a href="/">Etusivu</a>  
+<a href="/newprice">Lisää havainto</a> 
+<a href="/search">Etsi</a> <a href="/stats">Tilastot</a>  
+{% if session.username %}<a href="/addstation">Lisää asema</a>  <a href="/logout">Kirjaudu ulos</a> {% endif%}
 
 <hr>
 {% block content %}{% endblock %}

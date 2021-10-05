@@ -46,8 +46,9 @@ def getstations():
     return result.fetchall()
 
 def getprices():
+    sql2 = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.time FROM prices P, stations S WHERE S.id = P.station_id ORDER BY S.station_name, time DESC;"
     sql = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.time FROM prices P, stations S WHERE S.id = P.station_id ORDER BY time DESC LIMIT 20;"
-    result = db.session.execute(sql)
+    result = db.session.execute(sql2)
     return result.fetchall()
 
 def isadmin(username):
@@ -89,9 +90,20 @@ def getchatmessages():
     result = db.session.execute(sql)
     return result
 
+def getrequests():
+    sql = "SELECT id, sender_id, message, time FROM requests WHERE visible = TRUE;"
+    result = db.session.execute(sql)
+    return result
 
+def addrequest(sender_id, message):
+    sql = "INSERT INTO requests (sender_id, message, visible, time) VALUES (:sender_id, :message, TRUE, NOW());"
+    db.session.execute(sql,{"sender_id":sender_id, "message":message})
+    db.session.commit()
 
-
-
+def hiderequest(request_id):
+    print("poistetaan", request_id)
+    sql = "UPDATE requests SET visible=FALSE WHERE id=:request_id;"
+    db.session.execute(sql,{"request_id":request_id})
+    db.session.commit()
     
     

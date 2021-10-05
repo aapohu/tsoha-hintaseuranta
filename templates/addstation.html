@@ -1,3 +1,11 @@
+
+{% extends "layout.html" %}
+{% block title %}Lisää asema{% endblock %}
+
+{% block content %}
+
+{% if session.role == "admin" %}
+
 <form action="/newstation" method="POST">
     Asema <input type="text" name="station_name">
     Osoite<input type="text" name="address">
@@ -5,4 +13,27 @@
     Postinumero<input type="text" name="postnr">
     Tie<input type="text" name="road">
     <input type="submit" value="Lisää">
-    </form>
+</form>
+
+Uusimmat pyynnöt:
+
+ {% for req in requests %}
+ <br>
+ {{req}}
+ <form action="/hiderequest" method="POST">
+    <input type="hidden" name="request_id" value="{{ req[0] }}">
+    <input type="submit" value="Poista">
+</form>
+ <hr>
+ {% endfor %}
+
+
+
+{% else %}
+<form action="/requeststation" method="POST">
+    Kerro aseman tiedot(nimi, osoite, postinumero, kaupunki, lähin iso tie) tai nimi jolla sen löytää googlesta: <br>
+    <textarea cols="50" rows="3" name="message"></textarea>
+    <input type="submit" value="Lähetä">
+</form>
+{% endif %}
+{% endblock %}

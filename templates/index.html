@@ -42,14 +42,10 @@
 
 Chat <br>
 <table class="table2">
-
 {% for msg in chats %}
-
     <tr>
-        <td>{{ msg[1] }}:</td><td>{{ msg[0] }}</td><td>{{ msg[2].strftime("%d.%m.%y %H:%M") }}</td>
+        <td>{{ msg[2].strftime("%d.%m.%y %H:%M") }} {{ msg[1] }}: {{ msg[0] }}</td>
     </tr>
-    <br>
-
 {% endfor %}
 </table>
 {% if session.username %}
