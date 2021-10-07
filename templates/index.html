@@ -9,7 +9,7 @@
 {% if session.username %}
 <p>Terve {{ session.username }}</p>
 {% else %}
-<b>Kirjaudu sisään</b> <a href="/newuser"> <b>Rekisteröidy</b></a> 
+<b>Kirjaudu sisään</b>
 
 <form action="/login" method="POST">
 <input type="text" name="username">
