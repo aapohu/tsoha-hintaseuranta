@@ -90,10 +90,11 @@ def addprice():
     price1 = flask.request.form["price1"]
     price2 = flask.request.form["price2"]
     price3 = flask.request.form["price3"]
+    price4 = flask.request.form["price4"]
 
     #TODO check quality of input
 
-    db.addprice(user_id,st_id, price1, price2, price3)
+    db.addprice(user_id,st_id, price1, price2, price3, price4)
     print("User", flask.session["username"], "posted new price.")
 
     return flask.redirect("/")

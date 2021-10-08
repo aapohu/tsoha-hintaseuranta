@@ -1,4 +1,4 @@
-from re import S
+#from re import S
 from app import app
 from flask_sqlalchemy import SQLAlchemy
 from os import getenv
@@ -7,15 +7,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
 def adduser(username, password):
-
     sql = "INSERT INTO users (username, password)VALUES(:name, :password);"
     db.session.execute(sql, {"name":username, "password":password})
     db.session.commit()
     
 
-def addprice(user, station, price1, price2, price3):
-    sql = "INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price) VALUES (:station, :user, NOW(), TRUE, :price1, :price2, :price3);"
-    db.session.execute(sql,{"station":station, "user":user, "price1":price1, "price2":price2, "price3":price3})
+def addprice(user, station, price1, price2, price3, price4):
+    sql = "INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (:station, :user, NOW(), TRUE, :price1, :price2, :price3, :price4);"
+    db.session.execute(sql,{"station":station, "user":user, "price1":price1, "price2":price2, "price3":price3, "price4":price4})
     db.session.commit()
 
 def addstation(name, address, city, postnr, road):
@@ -46,10 +45,16 @@ def getstations():
     return result.fetchall()
 
 def getprices():
-    sql2 = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.time FROM prices P, stations S WHERE S.id = P.station_id ORDER BY S.station_name, time DESC;"
-    sql = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.time FROM prices P, stations S WHERE S.id = P.station_id ORDER BY time DESC LIMIT 20;"
+    sql2 = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time FROM prices P, stations S WHERE S.id = P.station_id ORDER BY S.station_name, time DESC;"
     result = db.session.execute(sql2)
     return result.fetchall()
+
+def get_all_prices():
+    sql = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time FROM prices P, stations S WHERE S.id = P.station_id ORDER BY time DESC LIMIT 20;"
+    result = db.session.execute(sql)
+    return result.fetchall()
+
+#def get_avg_prices():
 
 def isadmin(username):
     sql = "SELECT COUNT(*) FROM admin_users A, users U WHERE A.user_id=U.id AND U.username=:username;"
