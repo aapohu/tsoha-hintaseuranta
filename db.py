@@ -12,7 +12,7 @@ def adduser(username, password):
     db.session.commit()
     
 
-def addprice(user, station, price1, price2, price3, price4):
+def add_price(user, station, price1, price2, price3, price4):
     sql = "INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (:station, :user, NOW(), TRUE, :price1, :price2, :price3, :price4);"
     db.session.execute(sql,{"station":station, "user":user, "price1":price1, "price2":price2, "price3":price3, "price4":price4})
     db.session.commit()
@@ -25,22 +25,21 @@ def addstation(name, address, city, postnr, road):
 def hideprice(price_id):
     sql = "UPDATE prices SET visible=FALSE WHERE id=:pid;"
     db.session.execute(sql,{"pid":price_id})
+    db.session.commit()
 
-def closestation(station_id):
-    sql = "UPDATE stations SET operational=FALSE WHERE id=:stid;"
+def close_station(station_id):
+    print("suljetaan asema",station_id)
+    sql = "UPDATE stations SET operational = FALSE WHERE id=:stid;"
     db.session.execute(sql,{"stid":station_id})
-
-def hidestation(station_id):
-    sql = "UPDATE stations SET visible=FALSE WHERE id=:stid;"
-    db.session.execute(sql,{"stid":station_id})
+    db.session.commit()
 
 def hideuser(user_id):
     sql = "UPDATE users SET visible=FALSE WHERE id=:uid;"
     db.session.execute(sql,{"uid":user_id})
 
 
-def getstations():
-    sql = "SELECT * FROM stations;"
+def get_stations():
+    sql = "SELECT * FROM stations WHERE operational = TRUE;"
     result = db.session.execute(sql)
     return result.fetchall()
 

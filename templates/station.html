@@ -4,12 +4,11 @@
 
 <h2>{{ station.station_name }}</h2>
 <p>Osoite: {{ station.addr }}, {{ station.postnr }}, {{ station.city }}</p>
-{% if station.visible == t %}
+{% if station.operational == True %}
 <p>Asema on toiminnassa.</p>
 {% else %}
 <p>Aseman toiminta on lopetettu.</p>
 {% endif %}
-
 <table class="table1">
 <h3>Viimeisimmät hinnat</h3>
     <tr>
@@ -33,5 +32,10 @@
     {% endfor %}
 </table>
 
-
+{% if session.role == "admin" %}
+<form action="/station/{{station.id}}" method="POST">
+    <input type="hidden" name=station_id value="{{ station.id }}">
+    <input type="submit" value="SULJE ASEMA">
+</form>
+{% endif %}
 {% endblock %}

@@ -14,21 +14,6 @@
     Tie<input type="text" name="road">
     <input type="submit" value="Lisää">
 </form>
-
-Uusimmat pyynnöt:
-
- {% for req in requests %}
- <br>
- {{req}}
- <form action="/hiderequest" method="POST">
-    <input type="hidden" name="request_id" value="{{ req[0] }}">
-    <input type="submit" value="Poista">
-</form>
- <hr>
- {% endfor %}
-
-
-
 {% else %}
 <form action="/requeststation" method="POST">
     Kerro aseman tiedot(nimi, osoite, postinumero, kaupunki, lähin iso tie) tai nimi jolla sen löytää googlesta: <br>
@@ -36,4 +21,18 @@ Uusimmat pyynnöt:
     <input type="submit" value="Lähetä">
 </form>
 {% endif %}
+Käsittelemättömät pyynnöt:
+
+{% for req in requests %}
+<br>
+{{req}}
+<form action="/hiderequest" method="POST">
+    <input type="hidden" name="request_id" value="{{ req[0] }}">
+    <input type="submit" value="Poista">
+</form>
+<hr>
+{% endfor %}
+
+
+
 {% endblock %}

@@ -54,47 +54,49 @@ def error():
     flask.render_template("error.html")
     return flask.redirect("/")
 
-@app.route("/addstation")
-def addstation():
-    #if db.isadmin(flask.session["username"]):
-    return flask.render_template("addstation.html",requests=db.getrequests())
-    #else:
-    #   return flask.redirect("/")
 
-@app.route("/newstation",methods=["POST"])
+@app.route("/newstation",methods=["GET","POST"])
 def newstation():
-    st_name = flask.request.form["station_name"]
-    st_address = flask.request.form["address"]
-    st_city = flask.request.form["city"]
-    st_postnr = flask.request.form["postnr"]
-    st_road = flask.request.form["road"]
+    if flask.request.method == "GET":
+        return flask.render_template("newstation.html",requests=db.getrequests())
 
-    db.addstation(st_name, st_address, st_city, st_postnr, st_road)
-    return flask.redirect("/newprice")
+    if flask.request.method == "POST":
+        if flask.session["role"] == "admin":
+            st_name = flask.request.form["station_name"]
+            st_address = flask.request.form["address"]
+            st_city = flask.request.form["city"]
+            st_postnr = flask.request.form["postnr"]
+            st_road = flask.request.form["road"]
 
-@app.route("/newprice")
+            db.addstation(st_name, st_address, st_city, st_postnr, st_road)
+            return flask.redirect("/newprice")
+        else:
+            return flask.redirect("/")
+
+@app.route("/newprice",methods=["GET","POST"])
 def newprice():
-    if flask.session:
-        stations = db.getstations()
-        return flask.render_template("newprice.html", stations=stations)
-    else:
-        return flask.redirect("/")
+    if flask.request.method == "GET":
+        if flask.session:
+            stations = db.get_stations()
+            return flask.render_template("newprice.html", stations=stations)
+        else:
+            return flask.redirect("/")
+    
+    if flask.request.method == "POST":
+        if flask.session:
+            user_id = flask.session["user_id"]
+            st_id = flask.request.form["station_number"]
+            price1 = flask.request.form["price1"]
+            price2 = flask.request.form["price2"]
+            price3 = flask.request.form["price3"]
+            price4 = flask.request.form["price4"]
 
-@app.route("/addprice",methods=["POST"])
-def addprice():
-    user_id = db.getuser(flask.session["username"])
-    st_id = flask.request.form["station_number"]
-    price1 = flask.request.form["price1"]
-    price2 = flask.request.form["price2"]
-    price3 = flask.request.form["price3"]
-    price4 = flask.request.form["price4"]
-
-    #TODO check quality of input
-
-    db.addprice(user_id,st_id, price1, price2, price3, price4)
-    print("User", flask.session["username"], "posted new price.")
-
-    return flask.redirect("/")
+            #TODO check quality of input
+            db.add_price(user_id,st_id, price1, price2, price3, price4)
+            print("User", flask.session["username"], "posted new price.")
+            return flask.redirect("/")
+        else:
+            return flask.redirect("/")
 
 @app.route("/newuser")
 def newuser():
@@ -151,12 +153,22 @@ def hiderequest():
 #     roads = db.get_roads()
 #     cities = db.get_areas()
 
-@app.route("/station/<int:id>")
+@app.route("/station/<int:id>", methods=["GET","POST"])
 def station(id):
-    station_id = int(id)
-    station = db.get_station_info(station_id)
-    prices = db.get_station_prices(station_id)
-    return flask.render_template("station.html", station=station, prices=prices)
+    if flask.request.method == "GET":
+        station_id = int(id)
+        station = db.get_station_info(station_id)
+        prices = db.get_station_prices(station_id)
+        return flask.render_template("station.html", station=station, prices=prices)
+    
+    if flask.request.method == "POST":
+        if flask.session["role"] == "admin":
+            station_id = flask.request.form["station_id"]
+            db.close_station(station_id)
+            return flask.redirect("/station/"+station_id)
+        else:
+            return flask.redirect("/")
+
 
 def hello():
     return "onnennumero: " + str(randint(0,100))
