@@ -7,7 +7,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
 def adduser(username, password):
-    sql = "INSERT INTO users (username, password)VALUES(:name, :password);"
+    sql = "INSERT INTO users (username, password) VALUES (:name, :password);"
     db.session.execute(sql, {"name":username, "password":password})
     db.session.commit()
     
@@ -45,19 +45,41 @@ def getstations():
     return result.fetchall()
 
 def getprices():
-    sql2 = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time FROM prices P, stations S WHERE S.id = P.station_id ORDER BY S.station_name, time DESC;"
+    sql2 = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
+            FROM prices P, stations S \
+            WHERE S.id = P.station_id \
+            ORDER BY S.station_name, time DESC;"
     result = db.session.execute(sql2)
     return result.fetchall()
 
 def get_all_prices():
-    sql = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time FROM prices P, stations S WHERE S.id = P.station_id ORDER BY time DESC LIMIT 20;"
+    sql = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time\
+           FROM prices P, stations S\
+           WHERE S.id = P.station_id\
+           ORDER BY time DESC LIMIT 20;"
     result = db.session.execute(sql)
     return result.fetchall()
 
-#def get_avg_prices():
+def avg_prices_today():
+    #average price for today
+    sql = "SELECT ROUND(AVG(type1_price)::numeric,3), ROUND(AVG(type2_price)::numeric,3), ROUND(AVG(type3_price)::numeric,3), ROUND(AVG(type4_price)::numeric,3) \
+            FROM prices \
+            WHERE date_trunc('day', time) = CURRENT_DATE;"
+    result = db.session.execute(sql)
+    return result.fetchall()
+
+def avg_prices_oat():
+    #average daily prices of all time
+    sql = "SELECT ROUND(AVG(type1_price)::numeric,3) AS type1_avg, ROUND(AVG(type2_price)::numeric,3) AS type2_avg, ROUND(AVG(type3_price)::numeric,3) AS type3_avg, ROUND(AVG(type4_price)::numeric,3) AS type4_avg, date_trunc('day', time) \
+            FROM prices \
+            GROUP BY date_trunc('day', time);"
+    result = db.session.execute(sql)
+    return result.fetchall()
 
 def isadmin(username):
-    sql = "SELECT COUNT(*) FROM admin_users A, users U WHERE A.user_id=U.id AND U.username=:username;"
+    sql = "SELECT COUNT(*)\
+           FROM admin_users A, users U \
+           WHERE A.user_id=U.id AND U.username=:username;"
     result = db.session.execute(sql,{"username":username})
     value = result.fetchall()
     
@@ -106,9 +128,35 @@ def addrequest(sender_id, message):
     db.session.commit()
 
 def hiderequest(request_id):
-    print("poistetaan", request_id)
     sql = "UPDATE requests SET visible=FALSE WHERE id=:request_id;"
     db.session.execute(sql,{"request_id":request_id})
     db.session.commit()
     
-    
+def get_areas():
+    sql = "SELECT UNIQUE city \
+        FROM stations \
+        WHERE visible = TRUE;"
+    results = db.session.execute(sql)
+    return results.fetchall()
+
+def get_roads():
+    sql = "SELECT UNIQUE road \
+        FROM stations \
+        WHERE visible = TRUE;"
+    results = db.session.execute(sql)
+    return results.fetchall()
+
+def get_station_info(station_id):
+    sql = "SELECT id, station_name, addr, postnr, city, road, operational \
+        FROM stations \
+        WHERE id = :station_id;"
+    result = db.session.execute(sql,{"station_id":station_id})
+    return result.fetchone()
+
+def get_station_prices(station_id):
+    sql = "SELECT id, user_id, date_trunc('day', time) AS date, type1_price, type2_price, type3_price, type4_price \
+        FROM prices \
+        WHERE station_id = :station_id AND visible = TRUE \
+        ORDER BY date;"
+    result = db.session.execute(sql,{"station_id":station_id})
+    return result.fetchall()

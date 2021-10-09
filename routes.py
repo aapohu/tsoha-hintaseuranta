@@ -72,9 +72,6 @@ def newstation():
     db.addstation(st_name, st_address, st_city, st_postnr, st_road)
     return flask.redirect("/newprice")
 
-
-
-
 @app.route("/newprice")
 def newprice():
     if flask.session:
@@ -147,6 +144,19 @@ def hiderequest():
         return flask.redirect("/addstation")
     else:
         return flask.redirect("/")
+
+# @app.route("/search", methods = ["POST"])
+# def search():
+#     #TODO
+#     roads = db.get_roads()
+#     cities = db.get_areas()
+
+@app.route("/station/<int:id>")
+def station(id):
+    station_id = int(id)
+    station = db.get_station_info(station_id)
+    prices = db.get_station_prices(station_id)
+    return flask.render_template("station.html", station=station, prices=prices)
 
 def hello():
     return "onnennumero: " + str(randint(0,100))

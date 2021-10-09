@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}{{ station.station_name}}{% endblock %}
+{% block content%}
+
+<h2>{{ station.station_name }}</h2>
+<p>Osoite: {{ station.addr }}, {{ station.postnr }}, {{ station.city }}</p>
+{% if station.visible == t %}
+<p>Asema on toiminnassa.</p>
+{% else %}
+<p>Aseman toiminta on lopetettu.</p>
+{% endif %}
+
+<table class="table1">
+<h3>Viimeisimmät hinnat</h3>
+    <tr>
+      <th>pvm.</th>
+      <th>95 E10</th>
+      <th>98 E5</th>
+      <th>Diesel</th>
+      <th>E85</th>
+    </tr>
+
+
+{% for price in prices %}
+    <tr>
+      <td>{{ price.date.strftime("%d.%m.%y") }}</td>
+      <td>{{ price.type1_price }}</td>
+      <td>{{ price.type2_price }}</td>
+      <td>{{ price.type3_price }}</td>
+      <td>{{ price.type4_price }}</td>
+    </tr>
+
+    {% endfor %}
+</table>
+
+
+{% endblock %}
