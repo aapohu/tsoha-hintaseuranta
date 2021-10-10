@@ -1,5 +1,5 @@
 CREATE TABLE users (id SERIAL PRIMARY KEY, 
-            username VARCHAR UNIQUE (30), password VARCHAR (200), 
+            username VARCHAR (30) UNIQUE, password VARCHAR (200), 
             joindate TIMESTAMP, visible BOOLEAN);
 
 CREATE TABLE stations (id SERIAL PRIMARY KEY, 

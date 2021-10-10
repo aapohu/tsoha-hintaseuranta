@@ -143,11 +143,15 @@ def chatmessage():
         db.postchatmessage(user, message)
     return flask.redirect("/")
 
-# # @app.route("/search", methods = ["POST"])
-# def search():
-#     #TODO
-#     roads = db.get_roads()
-#     cities = db.get_areas()
+@app.route("/search")
+def search():
+    # roads = db.get_roads()
+    # cities = db.get_areas()
+    return flask.render_template("search.html")
+
+@app.route("/stats")
+def stats():
+    return flask.render_template("stats.html")
 
 @app.route("/station/<int:id>", methods=["GET","POST"])
 def station(id):
@@ -183,5 +187,3 @@ def user(id):
         else:
             return flask.redirect("/")
 
-def hello():
-    return "onnennumero: " + str(randint(0,100))
