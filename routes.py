@@ -80,7 +80,7 @@ def newstation():
             if flask.session["role"] == "admin":
                 request_id = flask.request.form["request_id"]
                 db.hiderequest(request_id)
-                return flask.redirect("/addstation")
+                return flask.redirect("/newstation")
             else:
                 return flask.redirect("/")
 
