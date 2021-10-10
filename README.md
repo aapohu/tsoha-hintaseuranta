@@ -5,6 +5,7 @@ Käyttäjät ovat joko tavallisia käyttäjiä tai ylläpitäjiä.
 **Tilanne 10.10.**
 
 Sovelluksen koekäyttö [Herokussa](https://aapohu-hintaseuranta.herokuapp.com/)
+
 Uusia juttuja:
 - E85 nyt myös mukana
 - Etusivulla chat
