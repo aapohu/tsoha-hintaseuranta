@@ -6,12 +6,7 @@ import db
 
 
 @app.route("/")
-def index():
-    if(flask.session):
-        print(flask.session)
-        print(db.isadmin(flask.session["username"]))
-        print(db.getuser(flask.session["username"]))
-    
+def index():  
     return flask.render_template("index.html", prices = db.getprices(), chats = db.getchatmessages())
 
 
@@ -19,21 +14,24 @@ def index():
 def login():
     username = flask.request.form["username"]
     password = flask.request.form["password"]
-    if db.isuser(username):
-        user_id = db.getuser(username)
-        hash = db.getpassword(username)
-        if werkzeug.security.check_password_hash(hash, password):
-            flask.session["username"] = username
-            flask.session["user_id"] = user_id
-            if db.isadmin(username):
-                flask.session["role"] = "admin"
-            else:
-                flask.session["role"] = "user"
+    if db.is_user(username):
+        if not db.banned(username):
+            user_id = db.getuser(username)
+            hash = db.getpassword(username)
+            if werkzeug.security.check_password_hash(hash, password):
+                flask.session["username"] = username
+                flask.session["user_id"] = user_id
+                if db.is_admin(username):
+                    flask.session["role"] = "admin"
+                else:
+                    flask.session["role"] = "user"
 
-            print("User", username, "logged in.")
-            return flask.redirect("/")
+                print("User", username, "logged in.")
+                return flask.redirect("/")
+            else:
+                return flask.render_template("error.html",message = "Väärä salasana!")
         else:
-            return flask.render_template("error.html",message = "Väärä salasana!")
+            return flask.render_template("error.html", message= "Käyttäjä bannattu.")
     else:
         return flask.render_template("error.html",message = "Käyttäjätunnusta ei löydy.")
 
@@ -115,7 +113,7 @@ def register():
 
     if password1 == password2:
         hash_value = werkzeug.security.generate_password_hash(password1)
-        db.adduser(username, hash_value)
+        db.add_user(username, hash_value)
         print("new user", username, "registered")
         return flask.redirect("/")
     else:
@@ -169,6 +167,23 @@ def station(id):
         else:
             return flask.redirect("/")
 
+@app.route("/user/<int:id>", methods=["GET","POST"])
+def user(id):
+    if flask.request.method == "GET":
+        user_id = int(id)
+        user = db.get_user_info(user_id)
+        return flask.render_template("user.html", user=user)
+    
+    if flask.request.method == "POST":
+        if flask.session["role"] == "admin":
+            action = flask.request.form["action"]
+            if action == "ban":
+                db.ban_user(id)
+            elif action == "unban":
+                db.unban_user(id)
+            return flask.redirect("/user/"+str(id))
+        else:
+            return flask.redirect("/")
 
 def hello():
     return "onnennumero: " + str(randint(0,100))

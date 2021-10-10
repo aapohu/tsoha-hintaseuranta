@@ -6,8 +6,8 @@ from os import getenv
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
-def adduser(username, password):
-    sql = "INSERT INTO users (username, password) VALUES (:name, :password);"
+def add_user(username, password):
+    sql = "INSERT INTO users (username, password, joindate, visible) VALUES (:name, :password, NOW(), TRUE);"
     db.session.execute(sql, {"name":username, "password":password})
     db.session.commit()
     
@@ -33,9 +33,17 @@ def close_station(station_id):
     db.session.execute(sql,{"stid":station_id})
     db.session.commit()
 
-def hideuser(user_id):
-    sql = "UPDATE users SET visible=FALSE WHERE id=:uid;"
+def ban_user(user_id):
+    sql = "UPDATE users SET visible = FALSE WHERE id=:uid;"
     db.session.execute(sql,{"uid":user_id})
+    print("pwned")
+    db.session.commit()
+
+def unban_user(user_id):
+    sql = "UPDATE users SET visible = TRUE WHERE id=:uid;"
+    db.session.execute(sql,{"uid":user_id})
+    print("poistetaan bannit")
+    db.session.commit()
 
 
 def get_stations():
@@ -75,7 +83,7 @@ def avg_prices_oat():
     result = db.session.execute(sql)
     return result.fetchall()
 
-def isadmin(username):
+def is_admin(username):
     sql = "SELECT COUNT(*)\
            FROM admin_users A, users U \
            WHERE A.user_id=U.id AND U.username=:username;"
@@ -91,12 +99,25 @@ def getuser(username):
 
     return value[0]
 
-def isuser(username):
+def is_user(username):
     sql = "SELECT COUNT(*) FROM users WHERE username =:username;"
     result = db.session.execute(sql,{"username":username})
     if result.fetchone()[0] == 1:
         return True
     return False
+
+def banned(username):
+    sql = "SELECT visible FROM users WHERE username =:username;"
+    result = db.session.execute(sql,{"username":username})
+    if result.fetchone()[0] == False:
+        return True
+    return False
+
+def get_user_info(user_id):
+    sql = "SELECT id, username, visible, (SELECT COUNT(*) FROM prices WHERE user_id = :id) AS pricecount, (SELECT COUNT(*) FROM chat WHERE sender_id = :id) AS chatcount FROM users WHERE id = :id;"
+    result = db.session.execute(sql,{"id":user_id})
+    return result.fetchone()
+
 
 def getpassword(username):
     sql = "SELECT password FROM users WHERE username =:username;"
