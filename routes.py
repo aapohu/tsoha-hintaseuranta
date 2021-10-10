@@ -7,7 +7,7 @@ import db
 
 @app.route("/")
 def index():  
-    return flask.render_template("index.html", prices = db.getprices(), chats = db.getchatmessages())
+    return flask.render_template("index.html", prices = db.getprices(), chats = db.get_chat_messages())
 
 
 @app.route("/login",methods=["POST"])

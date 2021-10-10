@@ -133,8 +133,8 @@ def postchatmessage(username, message):
     db.session.commit()
 
 
-def getchatmessages():
-    sql = "SELECT C.message, U.username, C.time FROM chat C, users U WHERE U.id = C.sender_id ORDER BY time DESC LIMIT 7;"
+def get_chat_messages():
+    sql = "SELECT C.message, U.username, C.time, U.id FROM chat C, users U WHERE U.id = C.sender_id AND U.visible = TRUE ORDER BY time DESC LIMIT 7;"
     result = db.session.execute(sql)
     return result
 

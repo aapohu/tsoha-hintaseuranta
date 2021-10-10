@@ -47,7 +47,7 @@
 <table class="table2">
 {% for msg in chats %}
     <tr>
-        <td>{{ msg[2].strftime("%d.%m.%y %H:%M") }} {{ msg[1] }}: {{ msg[0] }}</td>
+        <td>{{ msg[2].strftime("%d.%m.%y %H:%M") }} <a href="/user/{{msg[3]}}">{{ msg[1] }}</a>: {{ msg[0] }}</td>
     </tr>
 {% endfor %}
 </table>
