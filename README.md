@@ -5,6 +5,10 @@ Käyttäjät ovat joko tavallisia käyttäjiä tai ylläpitäjiä.
 **Tilanne 10.10.**
 
 Sovelluksen koekäyttö [Herokussa](https://aapohu-hintaseuranta.herokuapp.com/)
+| nimi    | salasana |
+| ----------- | ----------- |
+| BOSS     | pomo   |
+Uuden aseman voi lisätä kirjautumalla sisään adminiksi (tunnus BOSS salasana pomo) josta löytyvästä lomakkeesta aseman voi lisätä. Kenttään Tie tulee laittaa pieninumeroisin järkevän lähellä oleva tie.
 
 Uusia juttuja:
 - E85 nyt myös mukana
@@ -15,10 +19,6 @@ Uusia juttuja:
 - Asemilla omat sivut
 - Peruskäyttäjät voivat pyytää asemia lisättäväksi
 - Admin voi kuitata em. pyyntöjä
-
-Sisäänkirjautunut käyttäjä voi lisätä hintahavainnon "Lisää havainto"-linkin kautta. Hintaa lisätessä tulee manuaalisesti valita aseman numero alla olevasta listasta. 
-
-Uuden aseman voi lisätä kirjautumalla sisään adminiksi (tunnus BOSS salasana pomo) josta löytyvästä lomakkeesta aseman voi lisätä. Kenttään Tie tulee laittaa pieninumeroisin järkevän lähellä oleva tie.
 
 Käyttäjä voi: 
 - Rekisteröityä 
