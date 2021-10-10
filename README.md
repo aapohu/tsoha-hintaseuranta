@@ -5,10 +5,13 @@ Käyttäjät ovat joko tavallisia käyttäjiä tai ylläpitäjiä.
 **Tilanne 10.10.**
 
 Sovelluksen koekäyttö [Herokussa](https://aapohu-hintaseuranta.herokuapp.com/)
-| nimi    | salasana |
+
+Admin-käyttäjä on 
+
+|Tunnus|Salasana|
 | ----------- | ----------- |
 | BOSS     | pomo   |
-Uuden aseman voi lisätä kirjautumalla sisään adminiksi (tunnus BOSS salasana pomo) josta löytyvästä lomakkeesta aseman voi lisätä. Kenttään Tie tulee laittaa pieninumeroisin järkevän lähellä oleva tie.
+
 
 Uusia juttuja:
 - E85 nyt myös mukana
