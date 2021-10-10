@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Havainto #{{ info.id}}{% endblock %}
+{% block content%}
+
+<p>Asema: <a href="/station/{{info.station_id}}">{{info.station}}</a></p>
+<p>Ilmoittaja: <a href="/user/{{info.user_id}}">{{info.username}}</a></p>
+{% if info.visible == False %}
+<h3>Epäkelpo havainto</h3>
+{% endif %}
+<table class="table1">
+    <tr>
+      <th>pvm.</th>
+      <th>95 E10</th>
+      <th>98 E5</th>
+      <th>Diesel</th>
+      <th>E85</th>
+    </tr>
+
+    <tr>
+      <td>{{ info.time.strftime("%d.%m.%y %H:%M:%S") }}</td>
+      <td>{{ info.type1_price }}</td>
+      <td>{{ info.type2_price }}</td>
+      <td>{{ info.type3_price }}</td>
+      <td>{{ info.type4_price }}</td>
+    </tr>
+</table>
+
+{% if session.role == "admin" %}
+{% if info.visible == True %}
+<form action="/price/{{info.id}}" method="POST">
+    <input type="submit" value="PIILOTA HAVAINTO">
+</form>
+{% endif %}
+{% endif %}
+{% endblock %}

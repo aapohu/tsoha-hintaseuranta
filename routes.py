@@ -7,7 +7,7 @@ import db
 
 @app.route("/")
 def index():  
-    return flask.render_template("index.html", prices = db.getprices(), chats = db.get_chat_messages())
+    return flask.render_template("index.html", prices = db.get_prices(), chats = db.get_chat_messages(), averages= db.get_avg_today())
 
 
 @app.route("/login",methods=["POST"])
@@ -66,7 +66,7 @@ def newstation():
                 st_postnr = flask.request.form["postnr"]
                 st_road = flask.request.form["road"]
 
-                db.addstation(st_name, st_address, st_city, st_postnr, st_road)
+                db.add_station(st_name, st_address, st_city, st_postnr, st_road)
                 return flask.redirect("/newprice")
             else:
                 return flask.redirect("/")
@@ -74,12 +74,12 @@ def newstation():
             if flask.session:
                 user = flask.session["user_id"]
                 message = flask.request.form["message"]
-                db.addrequest(user,message)
+                db.add_request(user,message)
                 return flask.redirect("/newstation")
         elif action == "request_remove":
             if flask.session["role"] == "admin":
                 request_id = flask.request.form["request_id"]
-                db.hiderequest(request_id)
+                db.hide_request(request_id)
                 return flask.redirect("/newstation")
             else:
                 return flask.redirect("/")
@@ -168,6 +168,18 @@ def station(id):
             return flask.redirect("/station/"+station_id)
         else:
             return flask.redirect("/")
+
+@app.route("/price/<int:id>", methods=["GET","POST"])
+def price(id):
+    if flask.request.method == "GET":
+            info = db.get_price(id)
+
+            return flask.render_template("price.html",info = info)
+    
+    if flask.request.method == "POST":
+        if flask.session["role"] == "admin":
+            db.hide_price(id)
+            return flask.redirect("/price/" + str(id))
 
 @app.route("/user/<int:id>", methods=["GET","POST"])
 def user(id):

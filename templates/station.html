@@ -17,6 +17,7 @@
       <th>98 E5</th>
       <th>Diesel</th>
       <th>E85</th>
+      <th>id</th>
     </tr>
 
 
@@ -27,6 +28,7 @@
       <td>{{ price.type2_price }}</td>
       <td>{{ price.type3_price }}</td>
       <td>{{ price.type4_price }}</td>
+      <td><a href="/price/{{price.id}}">{{ price.id }}</a></td>
     </tr>
 
     {% endfor %}
