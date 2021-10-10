@@ -34,10 +34,11 @@ def close_station(station_id):
     db.session.commit()
 
 def ban_user(user_id):
-    sql = "UPDATE users SET visible = FALSE WHERE id=:uid;"
-    db.session.execute(sql,{"uid":user_id})
-    print("pwned")
-    db.session.commit()
+    if user_id != 1:
+        sql = "UPDATE users SET visible = FALSE WHERE id=:uid;"
+        db.session.execute(sql,{"uid":user_id})
+        print("pwned")
+        db.session.commit()
 
 def unban_user(user_id):
     sql = "UPDATE users SET visible = TRUE WHERE id=:uid;"
