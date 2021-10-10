@@ -1,7 +1,8 @@
 <!doctype html>
+<link rel="shortcut icon" href="static/favicon.ico">
 <link rel="stylesheet" href="static/style.css"> 
 <title>nafta.net - {% block title %}{% endblock %}</title>
-<a href="/">Etusivu</a>  
+<a href="/"><img src="static/favicon.ico"></a>  
 <a href="/newprice">Lisää havainto</a> 
 <a href="/search">Etsi</a> <a href="/stats">Tilastot</a>  
 {% if session.username %}<a href="/newstation">Lisää asema</a>  <a href="/logout">Kirjaudu ulos</a> {% else %} <a href="/newuser">Rekisteröidy</a> {% endif%}

@@ -38,12 +38,9 @@ def login():
 @app.route("/logout")
 def logout():
     username = flask.session["username"]
-    
     del flask.session["username"]
     del flask.session["role"]
     del flask.session["user_id"]
-
-
     print("User", username, "logged out.")
     return flask.redirect("/")
 
@@ -56,20 +53,38 @@ def error():
 @app.route("/newstation",methods=["GET","POST"])
 def newstation():
     if flask.request.method == "GET":
-        return flask.render_template("newstation.html",requests=db.getrequests())
+        return flask.render_template("newstation.html",requests=db.get_requests())
 
-    if flask.request.method == "POST":
-        if flask.session["role"] == "admin":
-            st_name = flask.request.form["station_name"]
-            st_address = flask.request.form["address"]
-            st_city = flask.request.form["city"]
-            st_postnr = flask.request.form["postnr"]
-            st_road = flask.request.form["road"]
+    if flask.request.method == "POST" and flask.request:
+        action = flask.request.form["action"]
+        if action == "admin_add":
+            if flask.session["role"] == "admin":
+                
+                st_name = flask.request.form["station_name"]
+                st_address = flask.request.form["address"]
+                st_city = flask.request.form["city"]
+                st_postnr = flask.request.form["postnr"]
+                st_road = flask.request.form["road"]
 
-            db.addstation(st_name, st_address, st_city, st_postnr, st_road)
-            return flask.redirect("/newprice")
-        else:
-            return flask.redirect("/")
+                db.addstation(st_name, st_address, st_city, st_postnr, st_road)
+                return flask.redirect("/newprice")
+            else:
+                return flask.redirect("/")
+        elif action == "user_add":
+            if flask.session:
+                user = flask.session["user_id"]
+                message = flask.request.form["message"]
+                db.addrequest(user,message)
+                return flask.redirect("/newstation")
+        elif action == "request_remove":
+            if flask.session["role"] == "admin":
+                request_id = flask.request.form["request_id"]
+                db.hiderequest(request_id)
+                return flask.redirect("/addstation")
+            else:
+                return flask.redirect("/")
+
+
 
 @app.route("/newprice",methods=["GET","POST"])
 def newprice():
@@ -108,7 +123,7 @@ def register():
     password1 = flask.request.form["password1"]
     password2 = flask.request.form["password2"]
 
-    if db.isuser(username):
+    if db.is_user(username):
         return flask.render_template("error.html",message = "Käyttäjätunnus on jo varattu. Valitse jokin muu tunnus!")
 
     if password1 == password2:
@@ -128,24 +143,7 @@ def chatmessage():
         db.postchatmessage(user, message)
     return flask.redirect("/")
 
-@app.route("/requeststation", methods=["POST"])
-def requeststation():
-    if flask.session:
-        user = flask.session["user_id"]
-        message = flask.request.form["message"]
-        db.addrequest(user,message)
-    return flask.redirect("/")
-
-@app.route("/hiderequest", methods = ["POST"])
-def hiderequest():
-    if flask.session["role"] == "admin":
-        request_id = flask.request.form["request_id"]
-        db.hiderequest(request_id)
-        return flask.redirect("/addstation")
-    else:
-        return flask.redirect("/")
-
-# @app.route("/search", methods = ["POST"])
+# # @app.route("/search", methods = ["POST"])
 # def search():
 #     #TODO
 #     roads = db.get_roads()

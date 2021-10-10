@@ -12,24 +12,29 @@
     Kaupunki<input type="text" name="city">
     Postinumero<input type="text" name="postnr">
     Tie<input type="text" name="road">
+    <input type="hidden" name="action" value="admin_add">
     <input type="submit" value="Lisää">
 </form>
 {% else %}
-<form action="/requeststation" method="POST">
-    Kerro aseman tiedot(nimi, osoite, postinumero, kaupunki, lähin iso tie) tai nimi jolla sen löytää googlesta: <br>
+<form action="/newstation" method="POST">
+    <p>Kerro aseman tiedot(nimi, osoite, postinumero, kaupunki, lähin iso tie) tai nimi jolla sen löytää googlesta:</p>
+    <p>Ylläpitäjä lisää aseman kunhan kerkeää.</p>
     <textarea cols="50" rows="3" name="message"></textarea>
+    <input type="hidden" name="action" value="user_add">
     <input type="submit" value="Lähetä">
 </form>
 {% endif %}
-Käsittelemättömät pyynnöt:
+<p>Käsittelemättömät pyynnöt:</p>
 
 {% for req in requests %}
-<br>
-{{req}}
-<form action="/hiderequest" method="POST">
+<p>{{req.date.strftime("%d.%m.%y")}} <a href="/user/{{req.sender_id}}">{{ req.name }}</a>: {{req.message}} </p>
+{% if session.role == "admin" %}
+<form action="/newstation" method="POST">
     <input type="hidden" name="request_id" value="{{ req[0] }}">
+    <input type ="hidden" name="action" value="request_remove">
     <input type="submit" value="Poista">
 </form>
+{% endif %}
 <hr>
 {% endfor %}
 

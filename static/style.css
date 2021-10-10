@@ -1,3 +1,4 @@
+
 table.table1, table.table1 tr, table.table1 th, table.table1 td{
     border:1px solid black;
     padding: 2px;
@@ -16,4 +17,8 @@ table.table2 tr{
 }
 p {
     color:black;
+}
+
+img:hover {
+    transform: scale(1.2);
 }

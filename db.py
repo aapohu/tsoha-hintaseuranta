@@ -137,8 +137,10 @@ def getchatmessages():
     result = db.session.execute(sql)
     return result
 
-def getrequests():
-    sql = "SELECT id, sender_id, message, time FROM requests WHERE visible = TRUE;"
+def get_requests():
+    sql = "SELECT id, sender_id, (SELECT username FROM users WHERE id = sender_id) AS name, message, date_trunc('day', time) AS date \
+        FROM requests \
+        WHERE visible = TRUE;"
     result = db.session.execute(sql)
     return result
 
