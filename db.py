@@ -81,13 +81,23 @@ def get_avg_today():
     result = db.session.execute(sql)
     return result.fetchone()
 
-def get_avg_oat():
+def get_avg_daily():
     #average daily prices of all time
     sql = "SELECT ROUND(AVG(type1_price)::numeric,3) AS type1_avg, ROUND(AVG(type2_price)::numeric,3) AS type2_avg, ROUND(AVG(type3_price)::numeric,3) AS type3_avg, ROUND(AVG(type4_price)::numeric,3) AS type4_avg, date_trunc('day', time) \
             FROM prices \
             GROUP BY date_trunc('day', time);"
     result = db.session.execute(sql)
     return result.fetchall()
+
+def get_avg_monthly():
+    #average daily prices of all time
+    sql = "SELECT ROUND(AVG(type1_price)::numeric,3) AS type1_avg, ROUND(AVG(type2_price)::numeric,3) AS type2_avg, ROUND(AVG(type3_price)::numeric,3) AS type3_avg, ROUND(AVG(type4_price)::numeric,3) AS type4_avg, date_trunc('day', time) \
+            FROM prices \
+            GROUP BY date_trunc('month', time) \
+            LIMIT 36;"
+    result = db.session.execute(sql)
+    return result.fetchall()
+
 
 def is_admin(username):
     sql = "SELECT COUNT(*)\

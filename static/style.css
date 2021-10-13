@@ -22,3 +22,17 @@ p {
 img:hover {
     transform: scale(1.2);
 }
+
+canvas {
+    border: 3px solid blue;
+}
+
+table.sortable thead {
+    background-color:#eee;
+    color:#666666;
+    font-weight: bold;
+    cursor: default;
+    border: 1px black;
+    padding: 2px;
+}
+

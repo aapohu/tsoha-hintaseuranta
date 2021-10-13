@@ -1,13 +1,30 @@
-<!doctype html>
-<link rel="shortcut icon" href="/static/favicon.ico">
-<link rel="stylesheet" href="/static/style.css"> 
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"/>
+    <!-- jquery and datatables for sortable tables -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="/static/style.css"> 
+</head>
+
+<body>
 <title>nafta.net - {% block title %}{% endblock %}</title>
 <a href="/"><img src="/static/favicon.ico"></a>  
 
-<a href="/search">Etsi</a> <a href="/stats">Tilastot</a>  
+<a href="/search">Etsi</a> <a href="/stats">Tilastot</a>
+
 {% if session.username %}<a href="/newprice">Lisää havainto</a> <a href="/newstation">Lisää asema</a> <a href="/logout">Kirjaudu ulos</a> <a href="/user/{{session.user_id}}"> Profiili </a> {% else %} <a href="/newuser">Rekisteröidy</a> {% endif%}
 
 <hr>
 {% block content %}{% endblock %}
 <hr>
 Copyright 2021
+</body>
+</html>
