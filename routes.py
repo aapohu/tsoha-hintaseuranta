@@ -33,6 +33,7 @@ def login():
         else:
             return flask.render_template("error.html", message= "Käyttäjä bannattu.")
     else:
+        flask.flash("joujoujou", "error")
         return flask.render_template("error.html",message = "Käyttäjätunnusta ei löydy.")
 
 @app.route("/logout")
@@ -42,6 +43,7 @@ def logout():
     del flask.session["role"]
     del flask.session["user_id"]
     print("User", username, "logged out.")
+    flask.flash("Kirjauduttu ulos.")
     return flask.redirect("/")
 
 @app.route("/error")
@@ -151,7 +153,15 @@ def search():
 
 @app.route("/stats")
 def stats():
-    return flask.render_template("stats.html")
+    #data = db.get_avg_monthly()
+    #legend = "Hintatilastot"
+    #labels = ["Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu"]
+    #labels = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"]
+
+    legend = "Monthly Data"
+    labels = ["January", "February", "March", "April", "May", "June", "July", "August"]
+    values = [10, 9, 8, 7, 6, 4, 7, 8]
+    return flask.render_template("stats.html", legend = legend, labels = labels, values = values)
 
 @app.route("/station/<int:id>", methods=["GET","POST"])
 def station(id):

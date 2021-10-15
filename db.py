@@ -1,200 +1,141 @@
 from app import app
 from flask_sqlalchemy import SQLAlchemy
 from os import getenv
+import queries as q
 
 app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
 def add_user(username, password):
-    sql = "INSERT INTO users (username, password, joindate, visible) VALUES (:name, :password, NOW(), TRUE);"
-    db.session.execute(sql, {"name":username, "password":password})
+    db.session.execute(q.add_user, {"name":username, "password":password})
     db.session.commit()
 
 def add_price(user, station, price1, price2, price3, price4):
-    sql = "INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (:station, :user, NOW(), TRUE, :price1, :price2, :price3, :price4);"
-    db.session.execute(sql,{"station":station, "user":user, "price1":price1, "price2":price2, "price3":price3, "price4":price4})
+    db.session.execute(q.add_price,{"station":station, "user":user, "price1":price1, "price2":price2, "price3":price3, "price4":price4})
     db.session.commit()
 
 def add_station(name, address, city, postnr, road):
-    sql = "INSERT INTO stations (station_name, addr, city, postnr, road, operational, visible) VALUES (:name, :address, :city, :postnr, :road, TRUE, TRUE);"
-    db.session.execute(sql, {"name":name, "address":address,"city":city, "postnr":postnr, "road":road})
+    db.session.execute(q.add_station, {"name":name, "address":address,"city":city, "postnr":postnr, "road":road})
     db.session.commit()
 
 def hide_price(price_id):
     print("piilotetaan havainto", price_id)
-    sql = "UPDATE prices SET visible=FALSE WHERE id=:pid;"
-    db.session.execute(sql,{"pid":price_id})
+    db.session.execute(q.hide_price,{"pid":price_id})
     db.session.commit()
 
 def close_station(station_id):
     print("suljetaan asema",station_id)
-    sql = "UPDATE stations SET operational = FALSE WHERE id=:stid;"
-    db.session.execute(sql,{"stid":station_id})
+    db.session.execute(q.close_station,{"stid":station_id})
     db.session.commit()
 
 def ban_user(user_id):
+    #prevents admin from being banned
     if user_id != 1:
-        sql = "UPDATE users SET visible = FALSE WHERE id=:uid;"
-        db.session.execute(sql,{"uid":user_id})
+        db.session.execute(q.ban_user,{"uid":user_id})
         print("pwned")
         db.session.commit()
 
 def unban_user(user_id):
-    sql = "UPDATE users SET visible = TRUE WHERE id=:uid;"
-    db.session.execute(sql,{"uid":user_id})
-    print("poistetaan bannit")
+    db.session.execute(q.unban_user,{"uid":user_id})
     db.session.commit()
 
-
 def get_stations():
-    sql = "SELECT * FROM stations WHERE operational = TRUE;"
-    result = db.session.execute(sql)
+    result = db.session.execute(q.get_stations)
     return result.fetchall()
 
 def get_prices():
-    sql2 = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
-            FROM prices P, stations S \
-            WHERE S.id = P.station_id AND P.visible = TRUE\
-            ORDER BY S.station_name, time DESC;"
-    result = db.session.execute(sql2)
+    result = db.session.execute(q.get_prices)
     return result.fetchall()
 
 def get_all_prices():
-    sql = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time\
-           FROM prices P, stations S\
-           WHERE S.id = P.station_id\
-           ORDER BY time DESC LIMIT 20;"
-    result = db.session.execute(sql)
+    result = db.session.execute(q.get_all_prices)
     return result.fetchall()
 
 def get_price(price_id):
     #get single price info for "/price/id" pages
-    sql = "SELECT id, station_id, (SELECT station_name FROM stations WHERE id = station_id) AS station, user_id, (SELECT username FROM users WHERE id = user_id) AS username, type1_price, type2_price, type3_price, type4_price, time, visible FROM prices WHERE id = :pid;"
-    result = db.session.execute(sql,{"pid":price_id})
+    result = db.session.execute(q.get_one_price,{"pid":price_id})
     return result.fetchone()
 
 def get_avg_today():
     #average price for today
-    sql = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3), ROUND(AVG(NULLIF(type2_price,0.0))::numeric,3), ROUND(AVG(NULLIF(type3_price, 0.0))::numeric,3), ROUND(AVG(NULLIF(type4_price, 0.0))::numeric,3) \
-            FROM prices \
-            WHERE date_trunc('day', time) = CURRENT_DATE;"
-    result = db.session.execute(sql)
+    result = db.session.execute(q.get_avg_today)
     return result.fetchone()
 
 def get_avg_daily():
     #average daily prices of all time
-    sql = "SELECT ROUND(AVG(type1_price)::numeric,3) AS type1_avg, ROUND(AVG(type2_price)::numeric,3) AS type2_avg, ROUND(AVG(type3_price)::numeric,3) AS type3_avg, ROUND(AVG(type4_price)::numeric,3) AS type4_avg, date_trunc('day', time) \
-            FROM prices \
-            GROUP BY date_trunc('day', time);"
-    result = db.session.execute(sql)
+    result = db.session.execute(q.get_avg_daily)
     return result.fetchall()
 
 def get_avg_monthly():
     #average daily prices of all time
-    sql = "SELECT ROUND(AVG(type1_price)::numeric,3) AS type1_avg, ROUND(AVG(type2_price)::numeric,3) AS type2_avg, ROUND(AVG(type3_price)::numeric,3) AS type3_avg, ROUND(AVG(type4_price)::numeric,3) AS type4_avg, date_trunc('day', time) \
-            FROM prices \
-            GROUP BY date_trunc('month', time) \
-            LIMIT 36;"
-    result = db.session.execute(sql)
+    result = db.session.execute(q.get_avg_monthly)
     return result.fetchall()
 
-
 def is_admin(username):
-    sql = "SELECT COUNT(*)\
-           FROM admin_users A, users U \
-           WHERE A.user_id=U.id AND U.username=:username;"
-    result = db.session.execute(sql,{"username":username})
+    result = db.session.execute(q.is_admin,{"username":username})
     value = result.fetchall()
-    
     return value[0][0] == 1
 
 def getuser(username):
-    sql = "SELECT id FROM users WHERE username =:username;"
-    result = db.session.execute(sql,{"username":username})
+    result = db.session.execute(q.get_user_id,{"username":username})
     value = result.fetchone()
 
     return value[0]
 
 def is_user(username):
-    sql = "SELECT COUNT(*) FROM users WHERE username =:username;"
-    result = db.session.execute(sql,{"username":username})
+    result = db.session.execute(q.is_user,{"username":username})
     if result.fetchone()[0] == 1:
         return True
     return False
 
 def banned(username):
-    sql = "SELECT visible FROM users WHERE username =:username;"
-    result = db.session.execute(sql,{"username":username})
+    result = db.session.execute(q.is_banned,{"username":username})
     if result.fetchone()[0] == False:
         return True
     return False
 
 def get_user_info(user_id):
-    sql = "SELECT id, username, visible, (SELECT COUNT(*) FROM prices WHERE user_id = :id) AS pricecount, (SELECT COUNT(*) FROM chat WHERE sender_id = :id) AS chatcount FROM users WHERE id = :id;"
-    result = db.session.execute(sql,{"id":user_id})
+    result = db.session.execute(q.get_user_info,{"id":user_id})
     return result.fetchone()
 
-
 def getpassword(username):
-    sql = "SELECT password FROM users WHERE username =:username;"
-    result = db.session.execute(sql,{"username":username})
+    result = db.session.execute(q.get_password,{"username":username})
     value = result.fetchone()
     return value[0]
 
-
 def postchatmessage(username, message):
-    sql = "INSERT INTO chat (sender_id, message, time) VALUES (:username, :message, NOW());"
-    db.session.execute(sql,{"username":username, "message":message})
+    db.session.execute(q.post_chat_message,{"username":username, "message":message})
     db.session.commit()
 
 
 def get_chat_messages():
-    sql = "SELECT C.message, U.username, C.time, U.id FROM chat C, users U WHERE U.id = C.sender_id AND U.visible = TRUE ORDER BY time DESC LIMIT 7;"
-    result = db.session.execute(sql)
+    result = db.session.execute(q.get_chat_messages)
     return result
 
 def get_requests():
-    sql = "SELECT id, sender_id, (SELECT username FROM users WHERE id = sender_id) AS name, message, date_trunc('day', time) AS date \
-        FROM requests \
-        WHERE visible = TRUE;"
-    result = db.session.execute(sql)
+    result = db.session.execute(q.get_requests)
     return result
 
 def add_request(sender_id, message):
-    sql = "INSERT INTO requests (sender_id, message, visible, time) VALUES (:sender_id, :message, TRUE, NOW());"
-    db.session.execute(sql,{"sender_id":sender_id, "message":message})
+    db.session.execute(q.add_request,{"sender_id":sender_id, "message":message})
     db.session.commit()
 
 def hide_request(request_id):
-    sql = "UPDATE requests SET visible=FALSE WHERE id=:request_id;"
-    db.session.execute(sql,{"request_id":request_id})
+    db.session.execute(q.hide_request,{"request_id":request_id})
     db.session.commit()
     
 def get_areas():
-    sql = "SELECT UNIQUE city \
-        FROM stations \
-        WHERE visible = TRUE;"
-    results = db.session.execute(sql)
+    results = db.session.execute(q.get_areas)
     return results.fetchall()
 
 def get_roads():
-    sql = "SELECT UNIQUE road \
-        FROM stations \
-        WHERE visible = TRUE;"
-    results = db.session.execute(sql)
+    results = db.session.execute(q.get_roads)
     return results.fetchall()
 
 def get_station_info(station_id):
-    sql = "SELECT id, station_name, addr, postnr, city, road, operational \
-        FROM stations \
-        WHERE id = :station_id;"
-    result = db.session.execute(sql,{"station_id":station_id})
+    result = db.session.execute(q.get_station_info,{"station_id":station_id})
     return result.fetchone()
 
 def get_station_prices(station_id):
-    sql = "SELECT id, user_id, date_trunc('day', time) AS date, type1_price, type2_price, type3_price, type4_price \
-        FROM prices \
-        WHERE station_id = :station_id AND visible = TRUE \
-        ORDER BY date;"
-    result = db.session.execute(sql,{"station_id":station_id})
+    result = db.session.execute(q.get_station_prices,{"station_id":station_id})
     return result.fetchall()
