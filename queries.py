@@ -27,19 +27,31 @@ get_all_prices = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.t
 
 get_one_price = "SELECT id, station_id, (SELECT station_name FROM stations WHERE id = station_id) AS station, user_id, (SELECT username FROM users WHERE id = user_id) AS username, type1_price, type2_price, type3_price, type4_price, time, visible FROM prices WHERE id = :pid;"
 
-get_avg_today = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3), ROUND(AVG(NULLIF(type2_price,0.0))::numeric,3), ROUND(AVG(NULLIF(type3_price, 0.0))::numeric,3), ROUND(AVG(NULLIF(type4_price, 0.0))::numeric,3) \
-            FROM prices \
-            WHERE date_trunc('day', time) = CURRENT_DATE;"
+get_avg_today = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3), \
+                        ROUND(AVG(NULLIF(type2_price,0.0))::numeric,3), \
+                        ROUND(AVG(NULLIF(type3_price, 0.0))::numeric,3), \
+                        ROUND(AVG(NULLIF(type4_price, 0.0))::numeric,3), \
+                        date_trunc('day', NOW()) as date\
+                        FROM prices \
+                        WHERE date_trunc('day', time) = CURRENT_DATE;"
 
-get_avg_daily = "SELECT ROUND(AVG(type1_price)::numeric,3) AS type1_avg, ROUND(AVG(type2_price)::numeric,3) AS type2_avg, ROUND(AVG(type3_price)::numeric,3) AS type3_avg, ROUND(AVG(type4_price)::numeric,3) AS type4_avg, date_trunc('day', time) \
-            FROM prices \
-            GROUP BY date_trunc('day', time) \
-            LIMIT 30;"
+get_avg_daily = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1_avg,\
+                        ROUND(AVG(NULLIF(type2_price, 0.0))::numeric,3) AS type2_avg,\
+                        ROUND(AVG(NULLIF(type3_price, 0.0))::numeric,3) AS type3_avg,\
+                        ROUND(AVG(NULLIF(type4_price, 0.0))::numeric,3) AS type4_avg,\
+                        date_trunc('month', time)\
+                        FROM prices \
+                        GROUP BY date_trunc('month', time) \
+                        LIMIT 30;"
 
-get_avg_monthly = "SELECT ROUND(AVG(type1_price)::numeric,3) AS type1_avg, ROUND(AVG(type2_price)::numeric,3) AS type2_avg, ROUND(AVG(type3_price)::numeric,3) AS type3_avg, ROUND(AVG(type4_price)::numeric,3) AS type4_avg, date_trunc('day', time) \
-            FROM prices \
-            GROUP BY date_trunc('month', time) \
-            LIMIT 36;"
+get_avg_monthly = "SELECT ROUND(AVG(type1_price)::numeric,3) AS type1_avg, \
+                    ROUND(AVG(type2_price)::numeric,3) AS type2_avg, \
+                    ROUND(AVG(type3_price)::numeric,3) AS type3_avg, \
+                    ROUND(AVG(type4_price)::numeric,3) AS type4_avg, \
+                    date_trunc('day', time) \
+                    FROM prices \
+                    GROUP BY date_trunc('month', time) \
+                    LIMIT 36;"
 
 is_admin = "SELECT COUNT(*)\
            FROM admin_users A, users U \
@@ -72,6 +84,10 @@ get_areas = "SELECT UNIQUE city \
         WHERE visible = TRUE;"
 
 get_roads = "SELECT UNIQUE road \
+        FROM stations \
+        WHERE visible = TRUE;"
+
+get_postnrs = "SELECT UNIQUE postnr \
         FROM stations \
         WHERE visible = TRUE;"
 

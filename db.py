@@ -132,6 +132,10 @@ def get_roads():
     results = db.session.execute(q.get_roads)
     return results.fetchall()
 
+def get_postnrs():
+    results = db.session.execute(q.get_postnrs)
+    return results.fetchall()
+
 def get_station_info(station_id):
     result = db.session.execute(q.get_station_info,{"station_id":station_id})
     return result.fetchone()
