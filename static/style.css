@@ -1,4 +1,9 @@
 
+body {
+    font-family: "Lato", sans-serif;
+    font-size: 20;
+  }
+
 table.table1, table.table1 tr, table.table1 th, table.table1 td{
     border:1px solid black;
     padding: 2px;
@@ -16,10 +21,18 @@ table.table2 tr{
     color:grey;
 }
 p {
+    font-size: 15;
     color:black;
 }
 
+img{
+    padding-left:25px;
+    padding-top: 25px;
+
+}
+
 img:hover {
+    
     transform: scale(1.2);
 }
 
@@ -36,3 +49,30 @@ table.sortable thead {
     padding: 2px;
 }
 
+.sidebar {
+    height:100%;
+    width: 200px;
+    position:fixed;
+    z-index: 1; 
+    top: 0; 
+    left: 0;
+    background-color:grey;
+    overflow-x: hidden;
+    padding-top: 20px;
+    font-size: 20px;
+}
+
+.sidebar a{
+  padding: 10px 10px 10px;
+  text-decoration: none;
+  color:white;
+  display: block;
+}
+
+.sidebar a:hover {
+    color: blue;
+  }
+
+.content {
+    margin-left:200px;
+}

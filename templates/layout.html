@@ -10,21 +10,33 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 
+
+    <script type="text/javascript" src = "https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+
     <link rel="shortcut icon" href="/static/favicon.ico">
     <link rel="stylesheet" href="/static/style.css"> 
 </head>
 
 <body>
 <title>nafta.net - {% block title %}{% endblock %}</title>
-<a href="/"><img src="/static/favicon.ico"></a>  
 
-<a href="/search">Etsi</a> <a href="/stats">Tilastot</a>
+<div class = "sidebar">
+    <a href="/"><img src="/static/favicon.ico"></a><br>
+    <a href="/search">Etsi</a><br>
+    <a href="/stats">Tilastot</a><br>
+    {% if session.username %}
+    <a href="/newprice">Lisää havainto</a><br>
+    <a href="/newstation">Lisää asema</a><br>
+    <a href="/logout">Kirjaudu ulos</a> <br>
+    <a href="/user/{{session.user_id}}"> Profiili </a><br>
+    {% else %} 
+    <a href="/newuser">Rekisteröidy</a> <br>
+    {% endif%}
+</div>
 
-{% if session.username %}<a href="/newprice">Lisää havainto</a> <a href="/newstation">Lisää asema</a> <a href="/logout">Kirjaudu ulos</a> <a href="/user/{{session.user_id}}"> Profiili </a> {% else %} <a href="/newuser">Rekisteröidy</a> {% endif%}
+<div class="content">
+    {% block content %}{% endblock %}
+</div>
 
-<hr>
-{% block content %}{% endblock %}
-<hr>
-Copyright 2021
 </body>
 </html>
