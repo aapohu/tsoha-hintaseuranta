@@ -62,9 +62,12 @@
       </tbody>
     </table>
   </div>
-  
+
+  <!-- default sort by date -->
   <script>
-  $('#sortTable').DataTable();
+  $('#sortTable').DataTable({
+    "order": [[ 5, "desc" ]]
+  });
   </script>
 
 

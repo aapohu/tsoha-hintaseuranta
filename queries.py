@@ -101,7 +101,7 @@ get_areas = "SELECT DISTINCT city \
 
 get_roads = "SELECT DISTINCT road \
         FROM stations \
-        WHERE operational = TRUE;"
+        WHERE operational = TRUE AND road != '0';"
 
 get_postnrs = "SELECT DISTINCT postnr \
         FROM stations \
