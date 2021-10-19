@@ -147,11 +147,23 @@ def chatmessage():
             db.postchatmessage(user, message)
     return flask.redirect("/")
 
-@app.route("/search")
+@app.route("/search", methods = ["GET","POST"])
 def search():
-    # roads = db.get_roads()
-    # cities = db.get_areas()
-    return flask.render_template("search.html")
+    roads = db.get_roads()
+    cities = db.get_areas()
+    postnrs = db.get_postnrs()
+
+    if flask.request.method == "GET":
+        return flask.render_template("search.html", roads=roads, cities=cities, postnrs=postnrs)
+    
+    if flask.request.method == "POST":
+        form = int(flask.request.form["type"])
+        asd = ["roadnr","postnr","city"]
+        search = str(flask.request.form[asd[form]])
+        results = db.search_area(form, search)
+        print(results, "server")
+        return flask.render_template("search.html", roads=roads, cities=cities, postnrs=postnrs, results = results)
+
 
 @app.route("/stats")
 def stats():
@@ -184,7 +196,6 @@ def station(id):
 def price(id):
     if flask.request.method == "GET":
             info = db.get_price(id)
-
             return flask.render_template("price.html",info = info)
     
     if flask.request.method == "POST":

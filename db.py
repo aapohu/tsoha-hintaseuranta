@@ -71,6 +71,10 @@ def get_avg_monthly():
     result = db.session.execute(q.get_avg_monthly)
     return result.fetchall()
 
+def search_area(type, input):
+    result = db.session.execute(q.search_prices[type],{"search":input})
+    return result.fetchall()
+
 def is_admin(username):
     result = db.session.execute(q.is_admin,{"username":username})
     value = result.fetchall()
@@ -79,8 +83,8 @@ def is_admin(username):
 def getuser(username):
     result = db.session.execute(q.get_user_id,{"username":username})
     value = result.fetchone()
-
     return value[0]
+
 
 def is_user(username):
     result = db.session.execute(q.is_user,{"username":username})
