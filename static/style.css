@@ -26,9 +26,11 @@ p {
 }
 
 img{
+
+    padding-right: 25px;
     padding-left:25px;
     padding-top: 25px;
-
+    padding-bottom: 25px;
 }
 
 img:hover {
@@ -47,6 +49,7 @@ table.sortable thead {
     cursor: default;
     border: 1px black;
     padding: 2px;
+    color:darkgr
 }
 
 .sidebar {
@@ -63,7 +66,7 @@ table.sortable thead {
 }
 
 .sidebar a{
-  padding: 10px 10px 10px;
+  padding: 10px;
   text-decoration: none;
   color:white;
   display: block;

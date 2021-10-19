@@ -39,16 +39,17 @@ get_avg_daily = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1
                         ROUND(AVG(NULLIF(type2_price, 0.0))::numeric,3) AS type2_avg,\
                         ROUND(AVG(NULLIF(type3_price, 0.0))::numeric,3) AS type3_avg,\
                         ROUND(AVG(NULLIF(type4_price, 0.0))::numeric,3) AS type4_avg,\
-                        date_trunc('month', time)\
+                        date_trunc('day', time) AS date\
                         FROM prices \
-                        GROUP BY date_trunc('month', time) \
+                        GROUP BY date_trunc('day', time) \
+                        ORDER BY date\
                         LIMIT 30;"
 
 get_avg_monthly = "SELECT ROUND(AVG(type1_price)::numeric,3) AS type1_avg, \
                     ROUND(AVG(type2_price)::numeric,3) AS type2_avg, \
                     ROUND(AVG(type3_price)::numeric,3) AS type3_avg, \
                     ROUND(AVG(type4_price)::numeric,3) AS type4_avg, \
-                    date_trunc('day', time) \
+                    date_trunc('month', time) \
                     FROM prices \
                     GROUP BY date_trunc('month', time) \
                     LIMIT 36;"

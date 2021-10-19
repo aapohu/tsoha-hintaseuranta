@@ -2,9 +2,117 @@
 {% block title %}Tilastot{% endblock %}
 
 
-
-
-
-
 {% block content %}
+
+
+joujou
+    <!-- <div class="row">
+
+    <canvas id="myChart" width="500" height="300" ></canvas>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [{% for item in xx %} '{{item.strftime("%d.%m.%y")}}', {% endfor %}],
+                datasets: [{
+                    label: 'testi',
+                    data: [{% for item in yy %} {{item}}, {% endfor %}],
+                    pointHoverRadius: 10,
+                    pointHoverBackgroundColor:'red'
+
+                }]
+            },
+            options: {
+                responsive:false,
+                maintainAspectRatio:true,
+                lineThickness:10,
+                scales: {
+                    y: {
+                        ticks:{
+                            font:{
+                                size:20,
+                            }
+                        },
+                        min: 0,
+                        max: 2.5
+                    },
+                    x: {
+                        ticks:{
+                            font:{
+                                size:20,
+                            }
+                        }
+                    }
+
+                }
+            }
+        });
+</script>
+
+</div>
+<div class="row"> -->
+
+    <canvas id="dailyavgs" width="1000" height="500" ></canvas>
+    <script>
+        var ctx = document.getElementById('dailyavgs').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+            
+                labels: [{% for item in daily %} '{{item[4].strftime("%d.%m.%y")}}', {% endfor %}],
+                datasets: [{
+                    label: "95 E10",
+                    data: [{% for item in daily %} {{item[0]}}, {% endfor %}],
+                    backgroundColor:"green"
+                },{
+                    label: "98 E5",
+                    data: [{% for item in daily %} {{item[1]}}, {% endfor %}],
+                    backgroundColor:"darkgreen"
+
+                },{
+                    label: "DIESEL",
+                    data: [{% for item in daily %} {{item[2]}}, {% endfor %}],
+                    backgroundColor:"black"
+                },{
+                    label: "E85",
+                    data: [{% for item in daily %} {{item[3]}}, {% endfor %}],
+                    backgroundColor:"lightgreen"
+
+                },]
+            },
+            options: {
+                responsive:false,
+                maintainAspectRatio:true,
+                scales: {
+                    y: {
+                        ticks:{
+                            font:{
+                                size:20,
+                            }
+                        },
+                        min: 0,
+                        max: 2.5
+                    },
+                    x: {
+                        ticks:{
+                            font:{
+                                size:20,
+                            }
+                        }
+                    }
+
+                },
+                plugins: {
+                    title:{
+                        display: true,
+                        text: "Päivittäiset keskihinnat viimeisen 30pv ajalta"
+                    }
+                }
+            }
+        });
+</script>
+
+</div>
+
 {% endblock %}

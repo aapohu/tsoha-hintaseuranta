@@ -2,6 +2,7 @@ import werkzeug.security
 from app import app
 import flask
 import db
+import check as chk
 
 
 
@@ -142,7 +143,8 @@ def chatmessage():
     if flask.session:
         user = db.getuser(flask.session["username"])
         message = flask.request.form["message"]
-        db.postchatmessage(user, message)
+        if chk.check_length(message,160):
+            db.postchatmessage(user, message)
     return flask.redirect("/")
 
 @app.route("/search")
@@ -153,15 +155,14 @@ def search():
 
 @app.route("/stats")
 def stats():
-    #data = db.get_avg_monthly()
-    #legend = "Hintatilastot"
-    #labels = ["Tammi", "Helmi", "Maalis", "Huhti", "Touko", "Kesä", "Heinä", "Elo", "Syys", "Loka", "Marras", "Joulu"]
-    #labels = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"]
+    monthly = db.get_avg_monthly()
+    dly = db.get_avg_daily()
+    today = db.get_avg_today()
+    print("daily")
+    print(*dly, sep="\n")
+    d2 = chk.check_table(dly)
 
-    legend = "Monthly Data"
-    labels = ["January", "February", "March", "April", "May", "June", "July", "August"]
-    values = [10, 9, 8, 7, 6, 4, 7, 8]
-    return flask.render_template("stats.html", legend = legend, labels = labels, values = values)
+    return flask.render_template("stats.html", daily=d2)
 
 @app.route("/station/<int:id>", methods=["GET","POST"])
 def station(id):

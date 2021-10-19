@@ -9,6 +9,8 @@ def check_price(price:float):
         return False
     return True
 
-
-
+def check_table(table):
+    #replaces None values with 0
+    return [[val if val is not None else 0 for val in row] for row in table]
+    
 
