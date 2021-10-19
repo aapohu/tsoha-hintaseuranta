@@ -22,17 +22,17 @@ get_prices = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_
 
 search_prices = ["SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
             FROM prices P, stations S \
-            WHERE S.id = P.station_id AND S.visible = TRUE AND P.visible = TRUE AND S.road = :search\
+            WHERE S.id = P.station_id AND P.visible = TRUE AND S.road = :search\
             ORDER BY S.station_name, time DESC;",
 
             "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
             FROM prices P, stations S \
-            WHERE S.id = P.station_id AND S.visible = TRUE AND P.visible = TRUE AND S.postnr = :search \
+            WHERE S.id = P.station_id AND P.visible = TRUE AND S.postnr = :search \
             ORDER BY S.station_name, time DESC;",
             
             "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
             FROM prices P, stations S \
-            WHERE S.id = P.station_id AND S.visible = TRUE AND P.visible = TRUE AND S.city = :search\
+            WHERE S.id = P.station_id AND P.visible = TRUE AND S.city = :search\
             ORDER BY S.station_name, time DESC;"]
 
 get_all_prices = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time\
@@ -97,15 +97,15 @@ hide_request = "UPDATE requests SET visible=FALSE WHERE id=:request_id;"
 
 get_areas = "SELECT DISTINCT city \
         FROM stations \
-        WHERE visible = TRUE;"
+        WHERE operational = TRUE;"
 
 get_roads = "SELECT DISTINCT road \
         FROM stations \
-        WHERE visible = TRUE;"
+        WHERE operational = TRUE;"
 
 get_postnrs = "SELECT DISTINCT postnr \
         FROM stations \
-        WHERE visible = TRUE;"
+        WHERE operational = TRUE;"
 
 get_station_info = "SELECT id, station_name, addr, postnr, city, road, operational \
         FROM stations \
