@@ -22,17 +22,17 @@ get_prices = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_
 
 search_prices = ["SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
             FROM prices P, stations S \
-            WHERE S.id = P.station_id AND P.visible = TRUE AND S.road = :search\
+            WHERE S.id = P.station_id AND S.visible = TRUE AND P.visible = TRUE AND S.road = :search\
             ORDER BY S.station_name, time DESC;",
 
             "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
             FROM prices P, stations S \
-            WHERE S.id = P.station_id AND P.visible = TRUE AND S.postnr = :search \
+            WHERE S.id = P.station_id AND S.visible = TRUE AND P.visible = TRUE AND S.postnr = :search \
             ORDER BY S.station_name, time DESC;",
             
             "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
             FROM prices P, stations S \
-            WHERE S.id = P.station_id AND P.visible = TRUE AND S.city = :search\
+            WHERE S.id = P.station_id AND S.visible = TRUE AND P.visible = TRUE AND S.city = :search\
             ORDER BY S.station_name, time DESC;"]
 
 get_all_prices = "SELECT S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time\
