@@ -3,7 +3,7 @@ from app import app
 import flask
 import db
 import check as chk
-
+from secrets import token_hex as th
 
 
 @app.route("/")
@@ -22,6 +22,7 @@ def login():
             if werkzeug.security.check_password_hash(hash, password):
                 flask.session["username"] = username
                 flask.session["user_id"] = user_id
+                flask.session["csrf_token"] = th(16)
                 if db.is_admin(username):
                     flask.session["role"] = "admin"
                 else:
@@ -43,6 +44,7 @@ def logout():
     del flask.session["username"]
     del flask.session["role"]
     del flask.session["user_id"]
+    del flask.session["csrf_token"]
     print("User", username, "logged out.")
     flask.flash("Kirjauduttu ulos.")
     return flask.redirect("/")
@@ -100,17 +102,19 @@ def newprice():
     
     if flask.request.method == "POST":
         if flask.session:
-            user_id = flask.session["user_id"]
-            st_id = flask.request.form["station_number"]
-            price1 = flask.request.form["price1"]
-            price2 = flask.request.form["price2"]
-            price3 = flask.request.form["price3"]
-            price4 = flask.request.form["price4"]
+            if flask.request.form["csrf_token"]== flask.session["csrf_token"]:
+                print("csrf token check successful")
+                user_id = flask.session["user_id"]
+                st_id = flask.request.form["station_number"]
+                price1 = flask.request.form["price1"]
+                price2 = flask.request.form["price2"]
+                price3 = flask.request.form["price3"]
+                price4 = flask.request.form["price4"]
 
-            #TODO check quality of input
-            db.add_price(user_id,st_id, price1, price2, price3, price4)
-            print("User", flask.session["username"], "posted new price.")
-            return flask.redirect("/")
+                #TODO check quality of input
+                db.add_price(user_id,st_id, price1, price2, price3, price4)
+                print("User", flask.session["username"], "posted new price.")
+                return flask.redirect("/")
         else:
             return flask.redirect("/")
 
@@ -161,20 +165,22 @@ def search():
         asd = ["roadnr","postnr","city"]
         search = str(flask.request.form[asd[form]])
         results = db.search_area(form, search)
-        print(results, "server")
+        if results == []:
+            results = None
         return flask.render_template("search.html", roads=roads, cities=cities, postnrs=postnrs, results = results)
 
 
 @app.route("/stats")
 def stats():
     monthly = db.get_avg_monthly()
-    dly = db.get_avg_daily()
+    daily = db.get_avg_daily()
     today = db.get_avg_today()
-    print("daily")
-    print(*dly, sep="\n")
-    d2 = chk.check_table(dly)
 
-    return flask.render_template("stats.html", daily=d2)
+    
+    dailyf = chk.check_table(daily)
+    monthlyf = chk.check_table(monthly)
+
+    return flask.render_template("stats.html", daily=dailyf, monthly=monthlyf)
 
 @app.route("/station/<int:id>", methods=["GET","POST"])
 def station(id):
