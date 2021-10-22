@@ -1,9 +1,12 @@
 
-add_user = "INSERT INTO users (username, password, joindate, visible) VALUES (:name, :password, NOW(), TRUE);"
+add_user = "INSERT INTO users (username, password, joindate, visible) \
+            VALUES (:name, :password, NOW() AT TIME ZONE 'Europe/Helsinki', TRUE);"
 
-add_price = "INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (:station, :user, NOW() AT TIME ZONE 'Europe/Helsinki', TRUE, :price1, :price2, :price3, :price4);"
+add_price = "INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) \
+             VALUES (:station, :user, NOW() AT TIME ZONE 'Europe/Helsinki', TRUE, :price1, :price2, :price3, :price4);"
 
-add_station = "INSERT INTO stations (station_name, addr, city, postnr, road, operational, visible) VALUES (:name, :address, :city, :postnr, :road, TRUE, TRUE);"
+add_station = "INSERT INTO stations (station_name, addr, city, postnr, road, operational, visible) \
+               VALUES (:name, :address, :city, :postnr, :road, TRUE, TRUE);"
 
 hide_price = "UPDATE prices SET visible=FALSE WHERE id=:pid;"
 
@@ -46,7 +49,7 @@ get_avg_today = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3), \
                         ROUND(AVG(NULLIF(type2_price,0.0))::numeric,3), \
                         ROUND(AVG(NULLIF(type3_price, 0.0))::numeric,3), \
                         ROUND(AVG(NULLIF(type4_price, 0.0))::numeric,3), \
-                        date_trunc('day', NOW()) as date \
+                        date_trunc('day', NOW() AT TIME ZONE 'Europe/Helsinki') as date \
                         FROM prices \
                         WHERE visible = TRUE AND date_trunc('day', time) = CURRENT_DATE;"
 
