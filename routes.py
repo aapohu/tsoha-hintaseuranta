@@ -60,7 +60,11 @@ def newstation():
     if flask.request.method == "GET":
         return flask.render_template("newstation.html",requests=db.get_requests())
 
-    if flask.request.method == "POST" and flask.request:
+    if flask.request.method == "POST":
+
+        if flask.request.form["csrf_token"] != flask.session["csrf_token"]:
+            return flask.render_template("error.html", message="csrf token error")
+        print("csrf test success")
         action = flask.request.form["action"]
         if action == "admin_add":
             if flask.session["role"] == "admin":
@@ -102,19 +106,20 @@ def newprice():
     
     if flask.request.method == "POST":
         if flask.session:
-            if flask.request.form["csrf_token"]== flask.session["csrf_token"]:
-                print("csrf token check successful")
-                user_id = flask.session["user_id"]
-                st_id = flask.request.form["station_number"]
-                price1 = flask.request.form["price1"]
-                price2 = flask.request.form["price2"]
-                price3 = flask.request.form["price3"]
-                price4 = flask.request.form["price4"]
+            if flask.request.form["csrf_token"] != flask.session["csrf_token"]:
+                return flask.render_template("error.html", message="csrf token error")
 
-                #TODO check quality of input
-                db.add_price(user_id,st_id, price1, price2, price3, price4)
-                print("User", flask.session["username"], "posted new price.")
-                return flask.redirect("/")
+            user_id = flask.session["user_id"]
+            st_id = flask.request.form["station_number"]
+            price1 = flask.request.form["price1"]
+            price2 = flask.request.form["price2"]
+            price3 = flask.request.form["price3"]
+            price4 = flask.request.form["price4"]
+
+            #TODO check quality of input
+            db.add_price(user_id,st_id, price1, price2, price3, price4)
+            print("User", flask.session["username"], "posted new price.")
+            return flask.redirect("/")
         else:
             return flask.redirect("/")
 
@@ -145,6 +150,9 @@ def register():
 @app.route("/chatmessage", methods=["POST"])
 def chatmessage():
     if flask.session:
+        if flask.request.form["csrf_token"] != flask.session["csrf_token"]:
+            return flask.render_template("error.html", message="csrf token error")
+
         user = db.getuser(flask.session["username"])
         message = flask.request.form["message"]
         if chk.check_length(message,160):
@@ -175,7 +183,6 @@ def stats():
     monthly = db.get_avg_monthly()
     daily = db.get_avg_daily()
     today = db.get_avg_today()
-
     
     dailyf = chk.check_table(daily)
     monthlyf = chk.check_table(monthly)
@@ -192,6 +199,9 @@ def station(id):
     
     if flask.request.method == "POST":
         if flask.session["role"] == "admin":
+            if flask.request.form["csrf_token"] != flask.session["csrf_token"]:
+                return flask.render_template("error.html", message="csrf token error")
+
             station_id = flask.request.form["station_id"]
             db.close_station(station_id)
             return flask.redirect("/station/"+station_id)

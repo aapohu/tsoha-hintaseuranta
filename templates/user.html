@@ -14,10 +14,12 @@
 {% if user.visible == True %}
 <p>Käyttäjä ei ole <i>vielä</i> bannattu. >:-)</p>
 <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" name="action" value="ban">
 </form>
 {% else %}
 <form method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" name="action" value="unban">
 </form>
 {% endif %}

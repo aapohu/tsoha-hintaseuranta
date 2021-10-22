@@ -36,6 +36,7 @@
 
 {% if session.role == "admin" %}
 <form action="/station/{{station.id}}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="hidden" name=station_id value="{{ station.id }}">
     <input type="submit" value="SULJE ASEMA">
 </form>

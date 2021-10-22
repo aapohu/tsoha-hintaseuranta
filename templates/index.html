@@ -68,6 +68,7 @@ $('#sortTable').DataTable();
 </table>
 {% if session.username %}
 <form action="chatmessage" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="textfield" name="message">
     <input type="submit" value="Lähetä">
     </form>

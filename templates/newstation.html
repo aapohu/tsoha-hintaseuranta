@@ -13,6 +13,7 @@
     Postinumero<input type="text" name="postnr">
     Tie<input type="text" name="road">
     <input type="hidden" name="action" value="admin_add">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Lisää">
 </form>
 {% else %}
@@ -21,6 +22,7 @@
     <p>Ylläpitäjä lisää aseman kunhan kerkeää.</p>
     <textarea cols="50" rows="3" name="message"></textarea>
     <input type="hidden" name="action" value="user_add">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Lähetä">
 </form>
 {% endif %}
@@ -32,6 +34,7 @@
 <form action="/newstation" method="POST">
     <input type="hidden" name="request_id" value="{{ req[0] }}">
     <input type ="hidden" name="action" value="request_remove">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Poista">
 </form>
 {% endif %}

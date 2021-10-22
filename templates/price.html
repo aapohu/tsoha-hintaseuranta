@@ -28,6 +28,7 @@
 {% if session.role == "admin" %}
 {% if info.visible == True %}
 <form action="/price/{{info.id}}" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="PIILOTA HAVAINTO">
 </form>
 {% endif %}
