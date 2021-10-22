@@ -19,20 +19,19 @@ CREATE TABLE chat (id SERIAL PRIMARY KEY, sender_id INTEGER REFERENCES users,
 
 CREATE TABLE admin_users (user_id INTEGER REFERENCES users);
 
-CREATE TABLE products (id SERIAL PRIMARY KEY, name VARCHAR (30));
-
 INSERT INTO users (username,password,joindate) VALUES ('BOSS','pbkdf2:sha256:150000$V0pONHil$d8abb05ccc68d571eee30bffe99f6be7515126e90c4580f2f6912f3e8634dc67',NOW());
 
 INSERT INTO admin_users (user_id) VALUES (1);
 
-INSERT INTO products (name) VALUES ('95 E10');
-INSERT INTO products (name) VALUES ('98 E5');
-INSERT INTO products (name) VALUES ('DIESEL');
-INSERT INTO products (name) VALUES ('E85');
 
 
 INSERT INTO stations (station_name,addr, city, postnr, road, operational, visible)
              VALUES ('Shell Express Itäväylä','Vehkalahdentie 39','Helsinki','00950','170',TRUE,TRUE);
 
-INSERT INTO prices (station_id,user_id,time,type1_price,type2_price,type3_price) VALUES
-            (1,1,NOW(),1.619,1.728,1.489);
+INSERT INTO prices (station_id,user_id,time,type1_price,type2_price,type3_price) VALUES (1,1,NOW(),1.619,1.728,1.489);
+
+INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (1,1, TIMESTAMP '2021-7-10 23:27:00', TRUE, 1.649, 0.0, 0.0, 0.0);
+
+INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (1,1, TIMESTAMP '2021-7-10 23:27:00', TRUE, 1.598, 0.0, 0.0, 0.0);
+
+INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (1,1, TIMESTAMP '2021-8-11 00:00:00', TRUE, 0.0, 1.708, 0.0, 0.0);
