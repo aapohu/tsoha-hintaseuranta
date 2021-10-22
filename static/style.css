@@ -34,12 +34,12 @@ img{
 }
 
 img:hover {
-    
-    transform: scale(1.2);
+
+    transform: rotate(25deg);
 }
 
 canvas {
-    border: 3px solid blue;
+    border: 3px solid #6AAB95;
 }
 
 table.sortable thead {
