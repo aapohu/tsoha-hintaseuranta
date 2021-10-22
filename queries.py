@@ -87,7 +87,7 @@ get_user_info = "SELECT id, username, visible, (SELECT COUNT(*) FROM prices WHER
 
 get_password = "SELECT password FROM users WHERE username =:username;"
 
-post_chat_message = "INSERT INTO chat (sender_id, message, time) VALUES (:username, :message, NOW());"
+post_chat_message = "INSERT INTO chat (sender_id, message, time) VALUES (:username, :message, NOW() AT TIME ZONE 'Europe/Helsinki');"
 
 get_chat_messages = "SELECT C.message, U.username, C.time, U.id FROM chat C, users U WHERE U.id = C.sender_id AND U.visible = TRUE ORDER BY time DESC LIMIT 7;"
 
@@ -95,7 +95,7 @@ get_requests = "SELECT id, sender_id, (SELECT username FROM users WHERE id = sen
         FROM requests \
         WHERE visible = TRUE;"
 
-add_request = "INSERT INTO requests (sender_id, message, visible, time) VALUES (:sender_id, :message, TRUE, NOW());"
+add_request = "INSERT INTO requests (sender_id, message, visible, time) VALUES (:sender_id, :message, TRUE, NOW() AT TIME ZONE 'Europe/Helsinki');"
 
 hide_request = "UPDATE requests SET visible=FALSE WHERE id=:request_id;"
 
