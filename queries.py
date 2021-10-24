@@ -89,7 +89,14 @@ get_password = "SELECT password FROM users WHERE username =:username;"
 
 post_chat_message = "INSERT INTO chat (sender_id, message, time) VALUES (:username, :message, NOW() AT TIME ZONE 'Europe/Helsinki');"
 
-get_chat_messages = "SELECT C.message, U.username, C.time, U.id FROM chat C, users U WHERE U.id = C.sender_id AND U.visible = TRUE ORDER BY time DESC LIMIT 7;"
+#subquery for inverse order of messages
+get_chat_messages = "SELECT * \
+                  FROM (SELECT C.message, U.username, C.time AS time, U.id \
+                        FROM chat C, users U \
+                        WHERE U.id = C.sender_id AND U.visible = TRUE \
+                        ORDER BY time DESC \
+                        LIMIT 10) AS messages\
+                ORDER BY messages.time ASC;"
 
 get_requests = "SELECT id, sender_id, (SELECT username FROM users WHERE id = sender_id) AS name, message, date_trunc('day', time) AS date \
         FROM requests \
