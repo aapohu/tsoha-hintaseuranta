@@ -3,58 +3,75 @@
 
 {% block content %}
 
-<div class="center">
-    <form action="search" method="POST">
-        <input type="radio" name="type" value="0" checked>Tie</input>
-        <input type="text" name="roadnr" list="rd" autocomplete="off">
-        <datalist id="rd">
-            {% for rd in roads%}
-            <option value={{ rd[0] }}>{{ rd[0] }}</option>
-            {% endfor %}
-        </datalist>
-        <br>
-        <input type="radio" name="type" value="1">Postinumero</input>
-        <input type="text" name="postnr" list="nr" autocomplete="off">
-        <datalist id="nr">
-            {% for nr in postnrs%}
-            <option value={{ nr[0] }}>{{ nr[0] }}</option>
-            {% endfor %}
+<h2 class="center">Haku</h2>
+<div class="center content">
+    <div class="contentacc corner">
+        <form action="search" method="POST">    
             
-        </datalist>
-        <br>
-        <input type="radio" name="type" value="2">Postitoimipaikka</input>
-        <input type="text" name="city" list="ct" autocomplete="off">
-        <datalist id="ct">
-            {% for ct in cities%}
-            <option value={{ ct[0] }}>{{ ct[0] }}</option>
-            {% endfor %}
-            <br>
-        </datalist>
-        <br>
-        <input type="submit" value="Hae">
+            <table class="center"> 
+                <tr>
+                    <td>
+                <input type="radio" name="type" value="0" checked>Tie</input>
+            </td>
+            <td>
+                <input type="text" name="roadnr" list="rd" autocomplete="off">
+                <datalist id="rd">
+                    {% for rd in roads%}
+                    <option value={{ rd[0] }}>{{ rd[0] }}</option>
+                    {% endfor %}
+                </datalist>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="radio" name="type" value="1">Postinumero</input>
+            </td>
+            <td>
+                <input type="text" name="postnr" list="nr" autocomplete="off">
+                <datalist id="nr">
+                    {% for nr in postnrs%}
+                    <option value={{ nr[0] }}>{{ nr[0] }}</option>
+                    {% endfor %}
+                    
+                </datalist>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="radio" name="type" value="2">Postitoimipaikka</input>
+            </td>
+            <td>
+                <input type="text" name="city" list="ct" autocomplete="off">
+                <datalist id="ct">
+                    {% for ct in cities%}
+                    <option value={{ ct[0] }}>{{ ct[0] }}</option>
+                    {% endfor %}
+                    <br>
+                </datalist>
+            </td>
+        </tr>
+    </table>
+    <br>
+    <input type="submit" value="Hae">
     </form>
 </div>
 
 
-<div>
-    
-{% if results is none %}
-    <p>Hakusi ei tuottanut tuloksia.</p>
-{% else %}
-        
-        <div class="container" style="width:40%";>
-            <table class="table table-striped table-bordered" id="sortTable">
+<div class="divider"></div>
+
+<div class="contentacc corner">
+            <table class="center" id="sortTable">
             <thead>
                 <tr>
-                <th>Asema</th>
-                <th>95 E10</th>
+                    <th>Asema</th>
+                    <th>95 E10</th>
                 <th>98 E5</th>
                 <th>Diesel</th>
                 <th>E85</th>
                 <th>pvm.</th>
-                </tr>
-            </thead>
-            <tbody>
+            </tr>
+        </thead>
+        <tbody>
             {% for price in results %}
             <tr>
                 <td><a href="/station/{{price[1]}}">{{ price[0] }}</a></td>
@@ -66,18 +83,15 @@
             </tr>
             
             {% endfor %}
-            </tbody>
-            </table>
-        </div>
-
-        <!-- default sort by date -->
-        <script>
+        </tbody>
+    </table>
+    
+    <!-- default sort by date -->
+    <script>
         $('#sortTable').DataTable({
             "order": [[ 5, "desc" ]]
         });
         </script>
-
         </div>
-{% endif %}
-
-{% endblock %}
+    </div>
+        {% endblock %}

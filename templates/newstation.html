@@ -3,16 +3,55 @@
 {% block title %}Lisää asema{% endblock %}
 
 {% block content %}
+<div class="content">
+    <div class="text-content">
 
 {% if session.role == "admin" %}
 
 <form action="/newstation" method="POST">
-    Asema <input type="text" name="station_name" required>
-    Osoite<input type="text" name="address" required>
-    Kaupunki<input type="text" name="city" required>
-    Postinumero<input type="text" name="postnr" required>
-    Tie<input type="text" name="road" required>
-    <input type="hidden" name="action" value="admin_add">
+    <table>
+        <tr>
+            <td>
+                Asema 
+            </td>
+            <td>
+                <input type="text" name="station_name" required><br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Osoite
+            </td>
+            <td>
+                <input type="text" name="address" required><br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Kaupunki
+            </td>
+            <td>
+                <input type="text" name="city" required><br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Postinumero
+            </td>
+            <td>
+                <input type="text" name="postnr" required><br>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Tie
+            </td>
+            <td>
+                <input type="text" name="road" required><br>
+            </td>
+        </tr>
+    </table>
+        <input type="hidden" name="action" value="admin_add">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Lisää">
 </form>
@@ -22,7 +61,7 @@
     <p>Ylläpitäjä lisää aseman kunhan kerkeää.</p>
     <textarea cols="50" rows="3" name="message" required></textarea>
     <input type="hidden" name="action" value="user_add">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}"><br>
     <input type="submit" value="Lähetä">
 </form>
 {% endif %}
@@ -31,15 +70,15 @@
     
     <h3>Käsittelemättömät pyynnöt</h3>
     
-{% for req in requests %}
-<p>{{req.date.strftime("%d.%m.%y")}} <a href="/user/{{req.sender_id}}">{{ req.name }}</a>: {{req.message}} </p>
-{% if session.role == "admin" %}
-<form action="/newstation" method="POST">
-    <input type="hidden" name="request_id" value="{{ req[0] }}">
-    <input type ="hidden" name="action" value="request_remove">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <input type="submit" value="Poista">
-</form>
+    {% for req in requests %}
+    <p>{{req.date.strftime("%d.%m.%y")}} <a href="/user/{{req.sender_id}}">{{ req.name }}</a>: {{req.message}} </p>
+    {% if session.role == "admin" %}
+    <form action="/newstation" method="POST">
+        <input type="hidden" name="request_id" value="{{ req[0] }}">
+        <input type ="hidden" name="action" value="request_remove">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <input type="submit" value="Poista">
+    </form>
 {% endif %}
 <hr>
 {% endfor %}
@@ -47,4 +86,6 @@
 
 
 
+</div>
+</div>
 {% endblock %}

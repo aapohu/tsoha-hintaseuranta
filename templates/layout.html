@@ -10,7 +10,7 @@
     <!-- jquery and datatables for sortable tables -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-
+    <script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js"></script>
 
     <script type="text/javascript" src = "https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
     <link rel="shortcut icon" href="/static/favicon.ico">
@@ -22,15 +22,16 @@
 
 <div class = "sidebar">
     <a href="/"><img src="/static/icon2.png" height="75px"></a><br>
-    <a href="/search">Etsi</a><br>
+    <a href="/search">Haku</a><br>
     <a href="/stats">Tilastot</a><br>
+    <a href="/info">Info</a> <br>
     {% if session.username %}
     <a href="/newprice">Lisää havainto</a><br>
     <a href="/newstation">Lisää asema</a><br>
-    <a href="/logout">Kirjaudu ulos</a> <br>
     <a href="/user/{{session.user_id}}"> {{ session.username }} </a><br>
+    <a href="/logout">Kirjaudu ulos</a> <br>
     {% else %} 
-    <a href="/newuser">Rekisteröidy</a> <br>
+    <a href="/register">Rekisteröidy</a> <br>
     {% endif%}
 </div>
 

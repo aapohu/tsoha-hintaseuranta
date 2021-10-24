@@ -3,16 +3,43 @@
 
 
 {% block content %}
+<h2 class="center">Hintatilastot</h2>
+<div class="center content">
+<div class="contentacc corner">    
+    <table class="center">
+        <h3>Keskihinnat tänään</h3>
+    <thead>
+        <tr>
+            <th>95 E10 </th>
+            <th>98 E5 </th>
+            <th>Diesel </th>
+            <th>E85 </th>
+            <th>pvm. </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ today[0] }}</td>
+            <td>{{ today[1] }}</td>
+            <td>{{ today[2] }}</td>
+            <td>{{ today[3] }}</td>
+            <td>{{ today.date.strftime("%d.%m.") }}</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<div class="divider"></div>
+
 <input class="accinput" type="checkbox" id="daily" />
 <label class="acclabel" for="daily">Päivittäiset</label>
-<div class="contentacc">
-    <canvas id="dailyavgs" width="1000" height="500" ></canvas>
+<div class="contentacc chart-container">
+    <canvas id="dailyavgs" style="position: relative; height:50vh; width:60vw" ></canvas>
     <script>
         var ctx = document.getElementById('dailyavgs').getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-            
+                
                 labels: [{% for item in daily %} '{{item[4].strftime("%d.%m.%y")}}', {% endfor %}],
                 datasets: [{
                     label: "95 E10",
@@ -22,7 +49,7 @@
                     label: "98 E5",
                     data: [{% for item in daily %} {{item[1]}}, {% endfor %}],
                     backgroundColor:"darkgreen"
-
+                    
                 },{
                     label: "DIESEL",
                     data: [{% for item in daily %} {{item[2]}}, {% endfor %}],
@@ -31,12 +58,10 @@
                     label: "E85",
                     data: [{% for item in daily %} {{item[3]}}, {% endfor %}],
                     backgroundColor:"lightgreen"
-
+                    
                 },]
             },
             options: {
-                responsive:false,
-                maintainAspectRatio:true,
                 scales: {
                     y: {
                         ticks:{
@@ -71,9 +96,9 @@
 
 <input class="accinput" type="checkbox" id="monthly" />
 <label class="acclabel" for="monthly">Kuukausittaiset</label>
-<div class="contentacc">
+<div class="contentacc chart-container">
     
-    <canvas id="monthlyavgs" width="1000" height="500" ></canvas>
+    <canvas id="monthlyavgs" style="position: relative; height:50vh; width:60vw" ></canvas>
     <script>
         var ctx = document.getElementById('monthlyavgs').getContext('2d');
         var myChart = new Chart(ctx, {
@@ -89,7 +114,7 @@
                     label: "98 E5",
                     data: [{% for item in monthly %} {{item[1]}}, {% endfor %}],
                     backgroundColor:"darkgreen"
-
+                    
                 },{
                     label: "DIESEL",
                     data: [{% for item in monthly %} {{item[2]}}, {% endfor %}],
@@ -98,12 +123,10 @@
                     label: "E85",
                     data: [{% for item in monthly %} {{item[3]}}, {% endfor %}],
                     backgroundColor:"lightgreen"
-
+                    
                 },]
             },
             options: {
-                responsive:false,
-                maintainAspectRatio:true,
                 scales: {
                     y: {
                         ticks:{
@@ -121,17 +144,112 @@
                             }
                         }
                     }
-
+                    
                 },
                 plugins: {
                     title:{
                         display: true,
                         text: "Kuukausittaiset keskihinnat (viim 36kk)",
-
+                        
                     }
                 }
             }
         });
-</script>
+        </script>
 </div>
-{% endblock %}
+<input class="accinput" type="checkbox" id="dailytable" />
+<label class="acclabel" for="dailytable">Päivittäiset taulukkona</label>
+<div class="contentacc">
+
+    <div class="center" style="width:70%">
+  <table class="table" id="dailyTable">
+    <thead>
+      <tr>
+        <th>pvm.</th>
+        <th>95 E10</th>
+        <th>98 E5</th>
+        <th>Diesel</th>
+        <th>E85</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>{{ today.date.strftime("%d.%m.%y.")}}</td>
+      <td>{{ today[0] }}</td>
+      <td>{{ today[1] }}</td>
+      <td>{{ today[2] }}</td>
+      <td>{{ today[3] }}</td>
+    </tr>
+    
+    {% for price in daily %}
+    <tr>
+      <td>{{ price[4].strftime("%d.%m.%y.") }}</td>
+      <td>{{ price[0] }}</td>
+      <td>{{ price[1] }}</td>
+      <td>{{ price[2] }}</td>
+      <td>{{ price[3] }}</td>
+    </tr>
+    
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="divider"></div>
+<script>
+$('#dailyTable').DataTable({
+    "searching": false,
+    "lengthChange": false,
+    "pageLength": 30,
+    "bPaginate": false,
+    "columnDefs" : [{"targets":0, "type":"date-eu"}],
+    "order": [[ 0, "asc" ]],
+});
+</script>
+
+    </div>
+    
+    <input class="accinput" type="checkbox" id="monthlytable" />
+    <label class="acclabel" for="monthlytable">Kuukausittaiset taulukkona</label>
+    <div class="contentacc">
+
+
+    <div class="center" style="width:70%">
+  <table class="table" id="monthlyTable">
+    <thead>
+      <tr>
+        <th>pvm.</th>
+        <th>95 E10</th>
+        <th>98 E5</th>
+        <th>Diesel</th>
+        <th>E85</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for price in monthly %}
+    <tr>
+      <td>{{ price[4].strftime("%m.%y.") }}</td>
+      <td>{{ price[0] }}</td>
+      <td>{{ price[1] }}</td>
+      <td>{{ price[2] }}</td>
+      <td>{{ price[3] }}</td>
+    </tr>
+    
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="divider"></div>
+<script>
+$('#monthlyTable').DataTable({
+    "searching": false,
+    "lengthChange": false,
+    "pageLength": 30,
+    "bPaginate": false,
+    "columnDefs" : [{"targets":0, "type":"date-eu"}],
+    "order": [[ 0, "asc" ]],
+});
+</script>
+        </div>
+        
+</div>
+        {% endblock %}

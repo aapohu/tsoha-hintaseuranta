@@ -10,6 +10,9 @@ from secrets import token_hex as th
 def index():  
     return flask.render_template("index.html", prices = db.get_prices(), chats = db.get_chat_messages(), averages= db.get_avg_today())
 
+@app.route("/info")
+def info():
+    return flask.render_template("info.html")
 
 @app.route("/login",methods=["POST"])
 def login():
@@ -35,7 +38,6 @@ def login():
         else:
             return flask.render_template("error.html", message= "Käyttäjä bannattu.")
     else:
-        flask.flash("joujoujou", "error")
         return flask.render_template("error.html",message = "Käyttäjätunnusta ei löydy.")
 
 @app.route("/logout")
@@ -45,14 +47,14 @@ def logout():
     del flask.session["role"]
     del flask.session["user_id"]
     del flask.session["csrf_token"]
+    flask.session.clear()
     print("User", username, "logged out.")
-    flask.flash("Kirjauduttu ulos.")
     return flask.redirect("/")
 
 @app.route("/error")
 def error():
-    flask.render_template("error.html")
-    return flask.redirect("/")
+    return flask.render_template("error.html")
+
 
 
 @app.route("/newstation",methods=["GET","POST"])
@@ -123,29 +125,27 @@ def newprice():
         else:
             return flask.redirect("/")
 
-@app.route("/newuser")
-def newuser():
-    if not flask.session:
-        return flask.render_template("registration.html")
-    return flask.redirect("/")
-
-@app.route("/register", methods=["POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    username = flask.request.form["username"]
-    password1 = flask.request.form["password1"]
-    password2 = flask.request.form["password2"]
+    if flask.request.method == "GET":
+        if not flask.session:
+            return flask.render_template("register.html")
 
-    if db.is_user(username):
-        return flask.render_template("error.html",message = "Käyttäjätunnus on jo varattu. Valitse jokin muu tunnus!")
+    if flask.request.method == "POST":
+        username = flask.request.form["username"]
+        password1 = flask.request.form["password1"]
+        password2 = flask.request.form["password2"]
 
-    if password1 == password2:
-        hash_value = werkzeug.security.generate_password_hash(password1)
-        db.add_user(username, hash_value)
-        print("new user", username, "registered")
-        return flask.redirect("/")
-    else:
-        return flask.render_template("error.html",message = "Salasanat eivät olleet samat. Olehan tarkkana.")
+        if db.is_user(username):
+            return flask.render_template("error.html",message = "Käyttäjätunnus on jo varattu. Valitse jokin muu tunnus!")
 
+        if password1 == password2:
+            hash_value = werkzeug.security.generate_password_hash(password1)
+            db.add_user(username, hash_value)
+            print("new user", username, "registered")
+            return flask.redirect("/")
+        else:
+            return flask.render_template("error.html",message = "Salasanat eivät olleet samat. Olehan tarkkana.")
 
 @app.route("/chatmessage", methods=["POST"])
 def chatmessage():
@@ -187,7 +187,7 @@ def stats():
     dailyf = chk.check_table(daily)
     monthlyf = chk.check_table(monthly)
 
-    return flask.render_template("stats.html", daily=dailyf, monthly=monthlyf)
+    return flask.render_template("stats.html", daily=dailyf, monthly=monthlyf, today=today)
 
 @app.route("/station/<int:id>", methods=["GET","POST"])
 def station(id):

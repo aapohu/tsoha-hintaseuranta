@@ -1,44 +1,48 @@
 {% extends "layout.html" %}
 {% block title %}{{ station.station_name}}{% endblock %}
 {% block content%}
+<div class="content">
+  <div class="text-content">
 
-<h2>{{ station.station_name }}</h2>
-<p>Osoite: {{ station.addr }}, {{ station.postnr }}, {{ station.city }}</p>
-{% if station.operational == True %}
-<p>Asema on toiminnassa.</p>
-{% else %}
-<p>Aseman toiminta on lopetettu.</p>
-{% endif %}
-<table class="table1">
-<h3>Viimeisimmät hinnat</h3>
-    <tr>
-      <th>pvm.</th>
-      <th>95 E10</th>
-      <th>98 E5</th>
-      <th>Diesel</th>
-      <th>E85</th>
-      <th>id</th>
-    </tr>
-
-
-{% for price in prices %}
-    <tr>
-      <td>{{ price.date.strftime("%d.%m.%y") }}</td>
+    <h2>{{ station.station_name }}</h2>
+    <p>Osoite: {{ station.addr }}, {{ station.postnr }}, {{ station.city }}</p>
+    {% if station.operational == True %}
+    <p>Asema on toiminnassa.</p>
+    {% else %}
+    <p>Aseman toiminta on lopetettu.</p>
+    {% endif %}
+    <table class="table1">
+      <h3>Viimeisimmät hinnat</h3>
+      <tr>
+        <th>pvm.</th>
+        <th>95 E10</th>
+        <th>98 E5</th>
+        <th>Diesel</th>
+        <th>E85</th>
+        <th>id</th>
+      </tr>
+      
+      
+      {% for price in prices %}
+      <tr>
+        <td>{{ price.date.strftime("%d.%m.%y") }}</td>
       <td>{{ price.type1_price }}</td>
       <td>{{ price.type2_price }}</td>
       <td>{{ price.type3_price }}</td>
       <td>{{ price.type4_price }}</td>
       <td><a href="/price/{{price.id}}">{{ price.id }}</a></td>
     </tr>
-
+    
     {% endfor %}
-</table>
-
+  </table>
+  
 {% if session.role == "admin" %}
 <form action="/station/{{station.id}}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <input type="hidden" name=station_id value="{{ station.id }}">
-    <input type="submit" value="SULJE ASEMA">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+  <input type="hidden" name=station_id value="{{ station.id }}">
+  <input type="submit" value="SULJE ASEMA">
 </form>
 {% endif %}
+</div>
+</div>
 {% endblock %}

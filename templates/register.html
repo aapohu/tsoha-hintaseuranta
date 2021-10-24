@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Rekisteröidy{% endblock %}
+{% block content%}
+{% if session.username %}
+
+{% else %}
+<div class="content">
+
+    <div class="text-content">
+        
+        <p>Rekisteröityminen</p>
+        <form action="/register" method="POST">
+            <table>
+                <tr><td>Käyttäjätunnus</td> <td> <input type="text" name="username" required></td></tr>
+                <tr><td>Salasana</td> <td><input type="password" name="password1"required></td> </tr>
+                <tr><td>Salasana uudelleen </td> <td> <input type="password" name="password2" required></td></tr>
+            </table>
+             <br>
+            <input type="submit" value="Rekisteröidy">
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

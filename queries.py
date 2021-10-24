@@ -60,7 +60,7 @@ get_avg_daily = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1
                         date_trunc('day', time) AS date \
                         FROM prices WHERE visible = TRUE \
                         GROUP BY date_trunc('day', time) \
-                        ORDER BY date\
+                        ORDER BY date ASC\
                         LIMIT 30;"
 
 get_avg_monthly = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1_avg, \
@@ -83,7 +83,7 @@ get_user_id = "SELECT id FROM users WHERE username =:username;"
 
 is_banned = "SELECT visible FROM users WHERE username =:username;"
 
-get_user_info = "SELECT id, username, visible, (SELECT COUNT(*) FROM prices WHERE user_id = :id) AS pricecount, (SELECT COUNT(*) FROM chat WHERE sender_id = :id) AS chatcount FROM users WHERE id = :id;"
+get_user_info = "SELECT id, username, visible, (SELECT COUNT(*) FROM prices WHERE user_id = :id) AS pricecount, (SELECT COUNT(*) FROM chat WHERE sender_id = :id) AS chatcount, joindate FROM users WHERE id = :id;"
 
 get_password = "SELECT password FROM users WHERE username =:username;"
 
