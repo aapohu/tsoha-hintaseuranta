@@ -1,43 +1,35 @@
 # hintaseuranta
-Tavoitteena on luoda [Polttoaine.netin](https://www.polttoaine.net) kaltainen hintatilastointisovellus, jossa käyttäjät ilmoittavat polttoaineiden hintoja eri jälleenmyyjillä.
-Käyttäjät ovat joko tavallisia käyttäjiä tai ylläpitäjiä.
+Kurssityö Tietokantasovellus-kurssille.
+Tavoitteena oli luoda PostgreSQL-tietokannalla ja Pythonin Flask-kirjastolla [Polttoaine.netin](https://www.polttoaine.net) kaltainen hintatilastointisovellus, jossa käyttäjät ilmoittavat polttoaineiden hintoja eri jälleenmyyjillä.
+Käyttäjät ovat joko tavallisia käyttäjiä tai ylläpitäjiä. 
 
-**Tilanne 10.10.**
-
-Sovelluksen koekäyttö [Herokussa](https://aapohu-hintaseuranta.herokuapp.com/)
-
-Admin-käyttäjä on 
-
-|Tunnus|Salasana|
-| ----------- | ----------- |
-| BOSS     | pomo   |
-
-
-Uusia juttuja:
-- E85 nyt myös mukana
-- Etusivulla chat
-- Ikonit
-- Yläpalkissa kaikki tarpeelliset linkit
-- Käyttäjillä omat profiilisivu
-- Asemilla omat sivut
-- Peruskäyttäjät voivat pyytää asemia lisättäväksi
-- Admin voi kuitata em. pyyntöjä
 
 Käyttäjä voi: 
+- Tarkastella viimeisimpiä havaintoja
 - Rekisteröityä 
-- Ilmoittaa hintahavainnon (käyttöliittymä kesken)
-- Ottaa yhteyden ylläpitäjään lomakkeella myyntipaikan lisäämistä varten
-- Tarkastella viimeisimpiä havaintoja (lajitteluominaisuus kesken)
-- Etsiä havaintoja tietyltä alueelta (kesken)
-- Tarkastella tilastoja, esimerkiksi viikonpäivien keskihintoja tai kuukausittaisia keskihintoja. (kesken)
+- Tarkastella hintatilastoja
+- Etsiä havaintoja tietyltä alueelta
+
+Rekisteröitynyt käyttäjä voi:
+- Ottaa yhteyden ylläpitäjään lomakkeella aseman lisäämistä varten
+- Lähettää viestejä chatissa
+- Ilmoittaa hintahavainnon
 
 Ylläpitäjä voi:
 - Muokata tietokannan tietoja
   - Lisätä/sulkea asemia 
   - Poistaa käyttäjien asemapyyntöjä
   - Bannata käyttäjän tai perua bannit
-  - Poistaa havaintoja (kesken)
+  - Poistaa havaintoja
 
+**Tilanne 24.10.**
 
+Sovelluksen koekäyttö [Herokussa](https://aapohu-hintaseuranta.herokuapp.com/)
 
+Käyttöohjeet löytyvät sivulta Info.
 
+Admin-käyttäjä on 
+
+|Tunnus|Salasana|
+| ----------- | ----------- |
+| BOSS     | pomo   |

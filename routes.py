@@ -18,27 +18,26 @@ def info():
 def login():
     username = flask.request.form["username"]
     password = flask.request.form["password"]
+
     if db.is_user(username):
         if not db.banned(username):
             user_id = db.getuser(username)
             hash = db.getpassword(username)
             if werkzeug.security.check_password_hash(hash, password):
+
                 flask.session["username"] = username
                 flask.session["user_id"] = user_id
                 flask.session["csrf_token"] = th(16)
+
                 if db.is_admin(username):
                     flask.session["role"] = "admin"
                 else:
                     flask.session["role"] = "user"
-
                 print("User", username, "logged in.")
                 return flask.redirect("/")
-            else:
-                return flask.render_template("error.html",message = "Väärä salasana!")
-        else:
-            return flask.render_template("error.html", message= "Käyttäjä bannattu.")
-    else:
-        return flask.render_template("error.html",message = "Käyttäjätunnusta ei löydy.")
+            return flask.render_template("error.html",message = "Väärä salasana!")
+        return flask.render_template("error.html", message= "Käyttäjä bannattu.")
+    return flask.render_template("error.html",message = "Käyttäjätunnusta ei löydy.")
 
 @app.route("/logout")
 def logout():
@@ -51,11 +50,11 @@ def logout():
     print("User", username, "logged out.")
     return flask.redirect("/")
 
+
+
 @app.route("/error")
 def error():
     return flask.render_template("error.html")
-
-
 
 @app.route("/newstation",methods=["GET","POST"])
 def newstation():
@@ -63,37 +62,34 @@ def newstation():
         return flask.render_template("newstation.html",requests=db.get_requests())
 
     if flask.request.method == "POST":
-
         if flask.request.form["csrf_token"] != flask.session["csrf_token"]:
             return flask.render_template("error.html", message="csrf token error")
-        print("csrf test success")
         action = flask.request.form["action"]
+
         if action == "admin_add":
             if flask.session["role"] == "admin":
-                
                 st_name = flask.request.form["station_name"]
                 st_address = flask.request.form["address"]
                 st_city = flask.request.form["city"]
                 st_postnr = flask.request.form["postnr"]
                 st_road = flask.request.form["road"]
-
                 db.add_station(st_name, st_address, st_city, st_postnr, st_road)
                 return flask.redirect("/newprice")
-            else:
-                return flask.redirect("/")
+            return flask.redirect("/")
+
         elif action == "user_add":
             if flask.session:
                 user = flask.session["user_id"]
                 message = flask.request.form["message"]
                 db.add_request(user,message)
                 return flask.redirect("/newstation")
+
         elif action == "request_remove":
             if flask.session["role"] == "admin":
                 request_id = flask.request.form["request_id"]
                 db.hide_request(request_id)
                 return flask.redirect("/newstation")
-            else:
-                return flask.redirect("/")
+            return flask.redirect("/")
 
 
 
@@ -118,9 +114,11 @@ def newprice():
             price3 = flask.request.form["price3"]
             price4 = flask.request.form["price4"]
 
-            #TODO check quality of input
-            db.add_price(user_id,st_id, price1, price2, price3, price4)
-            print("User", flask.session["username"], "posted new price.")
+            if chk.check_prices(price1,price2,price3,price4):
+                db.add_price(user_id,st_id, price1, price2, price3, price4)
+                print("User", flask.session["username"], "posted new price.")
+            else:
+                return flask.render_template("error.html", message="epäkelpoja arvoja tai kaikki arvot samoja")
             return flask.redirect("/")
         else:
             return flask.redirect("/")
@@ -170,24 +168,20 @@ def search():
     
     if flask.request.method == "POST":
         form = int(flask.request.form["type"])
-        asd = ["roadnr","postnr","city"]
-        search = str(flask.request.form[asd[form]])
+        opt = ["roadnr","postnr","city"]
+        search = str(flask.request.form[opt[form]])
         results = db.search_area(form, search)
-        if results == []:
-            results = None
         return flask.render_template("search.html", roads=roads, cities=cities, postnrs=postnrs, results = results)
 
 
 @app.route("/stats")
 def stats():
-    monthly = db.get_avg_monthly()
-    daily = db.get_avg_daily()
-    today = db.get_avg_today()
-    
-    dailyf = chk.check_table(daily)
-    monthlyf = chk.check_table(monthly)
-
-    return flask.render_template("stats.html", daily=dailyf, monthly=monthlyf, today=today)
+    mly = db.get_avg_monthly()
+    dly = db.get_avg_daily()
+    todayf = db.get_avg_today()
+    dailyf = chk.check_table(dly)
+    monthlyf = chk.check_table(mly)
+    return flask.render_template("stats.html", daily=dailyf, monthly=monthlyf, today=todayf)
 
 @app.route("/station/<int:id>", methods=["GET","POST"])
 def station(id):
@@ -205,15 +199,13 @@ def station(id):
             station_id = flask.request.form["station_id"]
             db.close_station(station_id)
             return flask.redirect("/station/"+station_id)
-        else:
-            return flask.redirect("/")
+        return flask.redirect("/")
 
-@app.route("/price/<int:id>", methods=["GET","POST"])
+@app.route("/price/<int:id>", methods=["GET", "POST"])
 def price(id):
     if flask.request.method == "GET":
             info = db.get_price(id)
-            return flask.render_template("price.html",info = info)
-    
+            return flask.render_template("price.html", info=info)
     if flask.request.method == "POST":
         if flask.session["role"] == "admin":
             db.hide_price(id)
@@ -225,7 +217,6 @@ def user(id):
         user_id = int(id)
         user = db.get_user_info(user_id)
         return flask.render_template("user.html", user=user)
-    
     if flask.request.method == "POST":
         if flask.session["role"] == "admin":
             action = flask.request.form["action"]
@@ -234,6 +225,5 @@ def user(id):
             elif action == "unban":
                 db.unban_user(id)
             return flask.redirect("/user/"+str(id))
-        else:
-            return flask.redirect("/")
+        return flask.redirect("/")
 
