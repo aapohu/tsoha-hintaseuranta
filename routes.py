@@ -50,8 +50,6 @@ def logout():
     print("User", username, "logged out.")
     return flask.redirect("/")
 
-
-
 @app.route("/error")
 def error():
     return flask.render_template("error.html")

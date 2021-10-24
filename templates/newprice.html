@@ -10,7 +10,7 @@
     
   <form action="/newprice" method="POST">
     Asema
-    <input type="text" name="station_number" list="st" autocomplete="off" size="100">
+    <input type="text" name="station_number" list="st" autocomplete="off" size="100" required>
     
     <datalist id="st">
       {% for station in stations%}
