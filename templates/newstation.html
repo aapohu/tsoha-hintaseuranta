@@ -7,11 +7,11 @@
 {% if session.role == "admin" %}
 
 <form action="/newstation" method="POST">
-    Asema <input type="text" name="station_name">
-    Osoite<input type="text" name="address">
-    Kaupunki<input type="text" name="city">
-    Postinumero<input type="text" name="postnr">
-    Tie<input type="text" name="road">
+    Asema <input type="text" name="station_name" required>
+    Osoite<input type="text" name="address" required>
+    Kaupunki<input type="text" name="city" required>
+    Postinumero<input type="text" name="postnr" required>
+    Tie<input type="text" name="road" required>
     <input type="hidden" name="action" value="admin_add">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Lisää">
@@ -20,14 +20,17 @@
 <form action="/newstation" method="POST">
     <p>Kerro aseman tiedot(nimi, osoite, postinumero, kaupunki, lähin iso tie) tai nimi jolla sen löytää googlesta:</p>
     <p>Ylläpitäjä lisää aseman kunhan kerkeää.</p>
-    <textarea cols="50" rows="3" name="message"></textarea>
+    <textarea cols="50" rows="3" name="message" required></textarea>
     <input type="hidden" name="action" value="user_add">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Lähetä">
 </form>
 {% endif %}
-<p>Käsittelemättömät pyynnöt:</p>
 
+<div>
+    
+    <h3>Käsittelemättömät pyynnöt</h3>
+    
 {% for req in requests %}
 <p>{{req.date.strftime("%d.%m.%y")}} <a href="/user/{{req.sender_id}}">{{ req.name }}</a>: {{req.message}} </p>
 {% if session.role == "admin" %}
@@ -40,6 +43,7 @@
 {% endif %}
 <hr>
 {% endfor %}
+</div>
 
 
 

@@ -10,31 +10,21 @@ table.table1, table.table1 tr, table.table1 th, table.table1 td{
 }
 
 table.table2{
+    text-align: left;
+    margin: 0 auto;
     border:1px solid black;
     width:30%;
-    
-}
-table.table2 td{
-    color:green;
-}
-table.table2 tr{
-    color:grey;
 }
 p {
     font-size: 15;
     color:black;
 }
 
-img{
-
-    padding-right: 25px;
-    padding-left:25px;
-    padding-top: 25px;
-    padding-bottom: 25px;
+img {
+    padding: 25px;
 }
 
 img:hover {
-
     transform: rotate(25deg);
 }
 
@@ -49,7 +39,23 @@ table.sortable thead {
     cursor: default;
     border: 1px black;
     padding: 2px;
-    color:darkgr
+}
+
+.chatmsg {
+    padding-left: 10px;
+    padding-bottom: 7px;
+}
+
+.chatbox {
+    border: 5px solid lightcoral;
+    text-align: left;
+    margin: 0 auto;
+    width:40%;
+}
+
+.topblock {
+    width: 100vh;
+    height: 30px;
 }
 
 .sidebar {
@@ -75,6 +81,13 @@ table.sortable thead {
 .sidebar a:hover {
     color: blue;
   }
+
+
+
+.center {
+    text-align: center;
+    margin: 0 auto;
+}
 
 .content {
     margin-left:200px;

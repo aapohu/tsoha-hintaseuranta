@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
+    <link rel="stylesheet" href="/static/style.css"/> 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css"/>
     <!-- jquery and datatables for sortable tables -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -12,9 +13,8 @@
 
 
     <script type="text/javascript" src = "https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
-
     <link rel="shortcut icon" href="/static/favicon.ico">
-    <link rel="stylesheet" href="/static/style.css"> 
+    
 </head>
 
 <body>
@@ -28,11 +28,13 @@
     <a href="/newprice">Lisää havainto</a><br>
     <a href="/newstation">Lisää asema</a><br>
     <a href="/logout">Kirjaudu ulos</a> <br>
-    <a href="/user/{{session.user_id}}"> Profiili </a><br>
+    <a href="/user/{{session.user_id}}"> {{ session.username }} </a><br>
     {% else %} 
     <a href="/newuser">Rekisteröidy</a> <br>
     {% endif%}
 </div>
+
+<div class="topblock"></div>
 
 <div class="content">
     {% block content %}{% endblock %}
