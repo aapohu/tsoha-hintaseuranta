@@ -2,11 +2,12 @@
 {% block title %}Lisää havainto{% endblock %}
 
 {% block content %}
-Käytä desimaalierottimena pistettä.<br>
-Jos asema ei myy jotain polttoainetta laita hinnaksi "0.0"<br>
-Aseman numero löytyy alla olevan taulukon ensimmäisestä sarakkeesta<br>
-<div class="corner contentacc">
+<h2 class="center">Lisää havainto</h2>
 
+<div class="center content">
+
+  <div class="corner contentacc">
+    
   <form action="/newprice" method="POST">
     Asema
     <input type="text" name="station_number" list="st" autocomplete="off" size="100">
@@ -27,34 +28,35 @@ Aseman numero löytyy alla olevan taulukon ensimmäisestä sarakkeesta<br>
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Lähetä">
   </form> 
-  </div>
-  
-  
+</div>
 
-  <div class="divider"></div>
-  <input class="accinput" type="checkbox" id="monthly" />
-  <label class="acclabel" for="monthly">Lista asemista</label>
-  <div class="contentacc">
-    <table>
-        <tr>
-            <th>nro</th>
-            <th>Asema</th>
-            <th>Osoite</th>
-            <th>Postinumero</th>
-            <th>Kaupunki</th>
-            <th>Tie</th>
-          </tr>
+
+
+<div class="divider"></div>
+<input class="accinput" type="checkbox" id="monthly" />
+<label class="acclabel" for="monthly">Lista asemista</label>
+<div class="contentacc">
+  <table>
+    <tr>
+      <th>nro</th>
+      <th>Asema</th>
+      <th>Osoite</th>
+      <th>Postinumero</th>
+      <th>Kaupunki</th>
+      <th>Tie</th>
+    </tr>
     {% for station in stations %}
     <tr>
-        <td>{{ station[0] }}</td>
-        <td><a href="/station/{{ station[0] }}">{{ station[1] }} </a></td>
-        <td>{{ station[2] }}</td>
-        <td>{{ station[4] }}</td>
-        <td>{{ station[3] }}</td>
-        <td>{{ station[5] }}</td>
-      </tr>
-
+      <td>{{ station[0] }}</td>
+      <td><a href="/station/{{ station[0] }}">{{ station[1] }} </a></td>
+      <td>{{ station[2] }}</td>
+      <td>{{ station[4] }}</td>
+      <td>{{ station[3] }}</td>
+      <td>{{ station[5] }}</td>
+    </tr>
+    
     {% endfor %}
-    </table>
-  </div>
+  </table>
+</div>
+</div>
 {% endblock %}

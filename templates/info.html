@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block title %}Info{% endblock %}
+
+{% block content %}
+<div class="content">
+
+    <div class="text-content">
+        
+        <h1>Nafta.net</h1>
+        
+        <h3>Yleistä</h3>
+        <p>Nafta.net ei vastaa polttoainehintojen oikeellisuudesta. <br>
+            Voit navigoida sivustolla sivupalkin kautta. Etusivulle pääset klikkaamalla kanisteria. <br>
+            Sivuston ulkoasu on suunniteltu ensisijassa vaaka-asentoiselle 1920x1080p monitorille, emme takaa täyttä toimivuutta muilla resoluutioilla taikka kuvasuhteilla.<br>
+            Turhat tai selkeästi virheelliset hintahavainnot poistetaan ja toistuvista rikkeistä tulee bannia. <br>
+            Havaintojen ja asemien lisääminen sekä chat on rajoitettu vain rekisteröityneille käyttäjille.</p>
+            
+        <h3><a href="/">Etusivu</a></h3>
+        <p>Etusivulla voit tarkastella viimeisintä kahtakymmentä hintahavaintoa sekä keskustella muiden käyttäjien kanssa chatissa.</p>
+        
+        
+        <h3><a href="/search">Haku</a></h3>
+        <p>
+            Haku-sivulla voit hakea hintahavaintoja tien, postinumeron tai postitoimipaikan perusteella.
+            Valitse ensin kategoria ja sitten kirjoita tekstikenttään haluamasi hakualue. Haun tuloksena on kaikki uusimmat hintahavainnot valitsemasi alueen asemilta. Jos kenttä ei kirjoittaessa ehdota haluamaasi aluetta, niin sitä ei ole vielä lisätty tietokantaan.
+            Jos haluat ilmoittaa asemia katso sivu <a href="/newstation">Lisää asema</a> .
+        </p>
+        
+        <h3><a href="/stats">Tilastot</a></h3>
+        <p>Tilastot-sivulla voit tarkastella polttoaineiden keskihintoja niiltä päiviltä ja kuukausilta jolloin hintahavaintoja on tehty. Voit tarkastella tilastoja joko interaktiivisena grafiikkana tai taulukkona.<br>
+        Päivän keskihinnassa lukeva "None" tarkoittaa että tänään ei ole vielä tullut havaintoja. Tietyn polttoaineen kohdalla 0 tarkoittaa, että kyseisenä päivänä ei ole kirjattu yhtään hintahavaintoa sille polttoaineelle.</p>
+        
+        <h3>
+            <a href="/newstation">
+                Lisää asema
+            </a>
+            </h3>
+        <p>Lisää asema-sivulla voit lähettää ylläpitäjälle pyynnön uuden aseman lisäämisestä. Sivulla näkyy käsittelemättömät pyynnöt joista voit päätellä onko pyyntösi aiheellinen.</p>
+        
+        <h3><a href="/newprice">Lisää havainto</a></h3>
+        <p>Lisää havainto-sivulla voit lähettää hintahavainnon. <br>
+            Valitse ensin asema hakemalla tekstikentästä nimen, osoitteen, postinumeron tai tien perusteella. Vaihtoehtoisesti voit myös syöttää suoraan aseman tunnusnumeron. Numeroita voi selata sivun alimmaisena löytyvästä listasta.<br>
+            Jos asema ei myy jotain polttoainetta, tai et saanut sitä syystä tai toisesta talteen, jätä hinnaksi 0.</p>
+        
+        {% if session %}
+        <h3><a href="/user/{{session.user_id}}">Profiili</a></h3>
+        {%else%}
+        <h3>Profiili</h3>
+        {%endif%}
+        <p>Profiilisivulla voit tarkastella omaa tai jonkun muun käyttäjän aktiivisuutta.</p>
+
+    </div>
+</div>
+
+    
+    {% endblock%}
