@@ -14,7 +14,7 @@ def check_table(table):
     return [[val if val is not None else 0 for val in row] for row in table]
     
 def check_prices(p1,p2,p3,p4):
-    prices=[p1,p2,p3,p4]
+    prices=[float(p1),float(p2),float(p3),float(p4)]
     if p1==p2==p3==p4:
         return False
     for price in prices:
