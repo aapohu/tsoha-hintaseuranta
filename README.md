@@ -24,6 +24,8 @@ Ylläpitäjä voi:
 
 **Tilanne 24.10.**
 
+**HUOM! Testatessa ilmeni kriittinen ongelma jonka korjasin deadlinen jälkeen klo 4:24. Tarkistusmoduuli oli rikkonut sovelluksen tärkeimmän ominaisuuden eli hintojen lisäämisen.**
+
 Sovelluksen koekäyttö [Herokussa](https://aapohu-hintaseuranta.herokuapp.com/)
 
 Käyttöohjeet löytyvät sivulta Info.
