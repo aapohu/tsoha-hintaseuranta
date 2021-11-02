@@ -21,7 +21,8 @@ get_stations = "SELECT * FROM stations WHERE operational = TRUE;"
 get_prices = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
             FROM prices P, stations S \
             WHERE S.id = P.station_id AND P.visible = TRUE \
-            ORDER BY S.station_name, time DESC;"
+            ORDER BY S.station_name, time DESC \
+            LIMIT 30;"
 
 search_prices = ["SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
             FROM prices P, stations S \
@@ -71,7 +72,7 @@ get_avg_monthly = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS typ
                     FROM prices WHERE visible = TRUE \
                     GROUP BY date_trunc('month', time) \
                     ORDER BY date\
-                    LIMIT 36;"
+                    LIMIT 24;"
 
 is_admin = "SELECT COUNT(*)\
            FROM admin_users A, users U \

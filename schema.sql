@@ -30,7 +30,7 @@ INSERT INTO stations (station_name,addr, city, postnr, road, operational, visibl
 
 INSERT INTO prices (station_id,user_id,time,type1_price,type2_price,type3_price) VALUES (1,1,NOW(),1.619,1.728,1.489);
 
-INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (1,1, TIMESTAMP '2021-7-10 23:27:00', TRUE, 1.649, 1.734, 1.473.0, 0.0);
+INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (1,1, TIMESTAMP '2021-7-10 23:27:00', TRUE, 1.649, 1.734, 1.473, 0.0);
 
 INSERT INTO prices (station_id, user_id, time, visible, type1_price, type2_price, type3_price, type4_price) VALUES (1,1, TIMESTAMP '2021-7-10 23:27:00', TRUE, 1.598, 0.0, 0.0, 0.0);
 

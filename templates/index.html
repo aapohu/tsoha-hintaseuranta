@@ -57,7 +57,12 @@
 </div>
 <div class="divider"></div>
 <script>
-$('#sortTable').DataTable();
+$('#sortTable').DataTable({
+    "lengthChange": false,
+    "pageLength": 30,
+    "columnDefs" : [{"targets":5, "type":"date-eu"}],
+    "order": [[ 5, "desc" ]],
+});
 </script>
 <div class="center">
   <h3>Chat</h3>
