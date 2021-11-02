@@ -20,7 +20,7 @@
 
 <div class="center" style="width:70%";>
   <h3>Viimeisimmät hintahavainnot</h3>
-  <table class="table" id="sortTable">
+  <table class="table" id="priceTable">
     <thead>
       <tr>
         <th>Asema</th>
@@ -48,7 +48,7 @@
       <td>{{ price[3] }}</td>
       <td>{{ price[4] }}</td>
       <td>{{ price[5] }}</td>
-      <td>{{ price[6].strftime("%d.%m. %H:%M") }}</td>
+      <td>{{ price[6].strftime("%d.%m.%y. %H:%M") }}</td>
     </tr>
     
     {% endfor %}
@@ -57,7 +57,7 @@
 </div>
 <div class="divider"></div>
 <script>
-$('#sortTable').DataTable({
+$('#priceTable').DataTable({
     "lengthChange": false,
     "pageLength": 31,
     "columnDefs" : [{"targets":5, "type":"date-eu"}],
