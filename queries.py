@@ -57,7 +57,7 @@ get_avg_today = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3), \
                         ROUND(AVG(NULLIF(type2_price,0.0))::numeric,3), \
                         ROUND(AVG(NULLIF(type3_price, 0.0))::numeric,3), \
                         ROUND(AVG(NULLIF(type4_price, 0.0))::numeric,3), \
-                        date_trunc('day', NOW() AT TIME ZONE 'Europe/Helsinki') as date \
+                        NOW() AT TIME ZONE 'Europe/Helsinki' as date \
                         FROM prices \
                         WHERE visible = TRUE AND date_trunc('day', time) = CURRENT_DATE;"
 
