@@ -172,15 +172,7 @@
         <th>E85</th>
       </tr>
     </thead>
-    <tbody>
-    <tr>
-      <td>{{ today.date.strftime("%d.%m.%y.")}}</td>
-      <td>{{ today[0] }}</td>
-      <td>{{ today[1] }}</td>
-      <td>{{ today[2] }}</td>
-      <td>{{ today[3] }}</td>
-    </tr>
-    
+    <tbody>    
     {% for price in daily %}
     <tr>
       <td>{{ price[4].strftime("%d.%m.%y.") }}</td>
