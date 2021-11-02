@@ -44,7 +44,7 @@ def get_stations():
     return result.fetchall()
 
 def get_prices():
-    result = db.session.execute(q.get_prices)
+    result = db.session.execute(q.get_prices_2)
     return result.fetchall()
 
 def get_all_prices():

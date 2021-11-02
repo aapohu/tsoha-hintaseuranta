@@ -18,11 +18,18 @@ unban_user = "UPDATE users SET visible = TRUE WHERE id=:uid;"
 
 get_stations = "SELECT * FROM stations WHERE operational = TRUE;"
 
-get_prices = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
-            FROM prices P, stations S \
-            WHERE S.id = P.station_id AND P.visible = TRUE \
-            ORDER BY S.station_name, time DESC \
-            LIMIT 30;"
+get_prices = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time FROM prices P, stations S WHERE S.id = P.station_id AND P.visible = TRUE ORDER BY time DESC LIMIT 30;"
+
+
+#gets latest 30 prices from unique stations
+get_prices_2 = "SELECT s.station_name, x.station_id, x.type1_price, x.type2_price, x.type3_price, x.type4_price, x.time \
+                FROM (SELECT DISTINCT ON(station_id) station_id, type1_price, type2_price, type3_price, type4_price, time, visible \
+                        FROM prices \
+                        WHERE visible = TRUE \
+                        ORDER BY station_id, time DESC) AS x, stations AS s \
+                WHERE x.station_id = s.id \
+                ORDER BY x.time DESC\
+                LIMIT 30;"
 
 search_prices = ["SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time \
             FROM prices P, stations S \
