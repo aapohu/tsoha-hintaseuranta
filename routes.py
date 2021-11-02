@@ -225,3 +225,9 @@ def user(id):
             return flask.redirect("/user/"+str(id))
         return flask.redirect("/")
 
+
+@app.route("/stations", methods=["GET"])
+def stations():
+    stations = db.get_stations()
+    return flask.render_template("stations.html", stations=stations)
+

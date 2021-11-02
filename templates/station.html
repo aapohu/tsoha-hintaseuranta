@@ -6,6 +6,11 @@
 
     <h2>{{ station.station_name }}</h2>
     <p>Osoite: {{ station.addr }}, {{ station.postnr }}, {{ station.city }}</p>
+    
+    {% if station.road != "0" %}
+    <p>Tie {{ station.road }}</p>
+    {% endif %}
+
     {% if station.operational == True %}
     <p>Asema on toiminnassa.</p>
     {% else %}

@@ -84,7 +84,11 @@
       <td>{{ station[2] }}</td>
       <td>{{ station[4] }}</td>
       <td>{{ station[3] }}</td>
-      <td>{{ station[5] }}</td>
+      <td>
+        {% if station[5] != "0" %}
+        {{ station[5] }}
+        {% endif %}
+      </td>
     </tr>
     
     {% endfor %}
