@@ -89,7 +89,10 @@
     <!-- default sort by date -->
     <script>
         $('#sortTable').DataTable({
-            "order": [[ 5, "desc" ]]
+            "order": [[ 5, "desc" ]],
+            "pageLength": 30,
+            "columnDefs" : [{"targets":5, "type":"date-eu"}],
+            "order": [[ 5, "desc" ]],
         });
         </script>
         </div>

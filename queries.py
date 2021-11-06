@@ -133,4 +133,4 @@ get_station_info = "SELECT id, station_name, addr, postnr, city, road, operation
 get_station_prices = "SELECT id, user_id, date_trunc('day', time) AS date, type1_price, type2_price, type3_price, type4_price \
         FROM prices \
         WHERE station_id = :station_id AND visible = TRUE \
-        ORDER BY date;"
+        ORDER BY date DESC;"
