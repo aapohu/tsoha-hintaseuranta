@@ -16,7 +16,7 @@ ban_user = "UPDATE users SET visible = FALSE WHERE id=:uid;"
 
 unban_user = "UPDATE users SET visible = TRUE WHERE id=:uid;"
 
-get_stations = "SELECT * FROM stations WHERE operational = TRUE;"
+get_stations = "SELECT * FROM stations WHERE operational = TRUE ORDER BY id DESC;"
 
 get_prices = "SELECT DISTINCT ON (S.station_name) S.station_name, S.id, P.type1_price, P.type2_price, P.type3_price, P.type4_price, P.time FROM prices P, stations S WHERE S.id = P.station_id AND P.visible = TRUE ORDER BY time DESC LIMIT 30;"
 
@@ -133,4 +133,4 @@ get_station_info = "SELECT id, station_name, addr, postnr, city, road, operation
 get_station_prices = "SELECT id, user_id, date_trunc('day', time) AS date, type1_price, type2_price, type3_price, type4_price \
         FROM prices \
         WHERE station_id = :station_id AND visible = TRUE \
-        ORDER BY date DESC;"
+        ORDER BY date DESC, id DESC;"
