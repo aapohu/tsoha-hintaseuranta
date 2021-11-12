@@ -72,7 +72,7 @@ get_avg_daily = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1
                         date_trunc('day', time) AS date \
                         FROM prices WHERE visible = TRUE \
                         GROUP BY date_trunc('day', time) \
-                        ORDER BY date ASC\
+                        ORDER BY date DESC\
                         LIMIT 30;"
 
 get_avg_monthly = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1_avg, \
@@ -82,7 +82,7 @@ get_avg_monthly = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS typ
                     date_trunc('month', time) AS date\
                     FROM prices WHERE visible = TRUE \
                     GROUP BY date_trunc('month', time) \
-                    ORDER BY date\
+                    ORDER BY date DESC\
                     LIMIT 24;"
 
 is_admin = "SELECT COUNT(*)\
