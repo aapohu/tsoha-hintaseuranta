@@ -74,7 +74,7 @@ get_avg_daily = "SELECT * \
                         FROM prices WHERE visible = TRUE \
                         GROUP BY date_trunc('day', time) \
                         ORDER BY date DESC\
-                        LIMIT 30;) AS daily\
+                        LIMIT 30) AS daily\
                 ORDER BY daily.date ASC;"
 
 get_avg_monthly = "SELECT * \

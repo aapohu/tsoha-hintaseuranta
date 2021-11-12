@@ -72,7 +72,7 @@ h2{
 
 .sidebar {
     height:100vh;
-    width: 10vw;
+    width: 15%;
     position:fixed;
     z-index: 1; 
     top: 0; 
@@ -80,6 +80,7 @@ h2{
     background-color:grey;
     overflow-x: hidden;
     padding-top: 20px;
+    padding-left:20px;
     font-size: 20px;
 }
 
@@ -100,14 +101,15 @@ h2{
 }
 
 .content {
-    margin-left:20vw;
+    margin-left:15%;
     height:100vh;
 }
 
 .text-content {
-    width: 80%;
+    width: 70vw;
     text-align: left;
     margin: 0 auto;
+    width: 80%;
     padding: 10px 25px;
     border: 1px solid #A7A7A7;
     margin: 0 0 1px 0;
