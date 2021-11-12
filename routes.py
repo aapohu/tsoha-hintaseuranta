@@ -117,7 +117,7 @@ def newprice():
                 print("User", flask.session["username"], "posted new price.")
             else:
                 return flask.render_template("error.html", message="epäkelpoja arvoja tai kaikki arvot samoja")
-            return flask.redirect("/")
+            return flask.redirect("/newprice")
         else:
             return flask.redirect("/")
 
