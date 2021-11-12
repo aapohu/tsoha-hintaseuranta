@@ -8,9 +8,13 @@ add_price = "INSERT INTO prices (station_id, user_id, time, visible, type1_price
 add_station = "INSERT INTO stations (station_name, addr, city, postnr, road, operational, visible) \
                VALUES (:name, :address, :city, :postnr, :road, TRUE, TRUE);"
 
+update_station = "UPDATE stations SET station_name = :name, addr = :address, city = :city, postnr = :postnr, road = :road WHERE id=:id;"
+
 hide_price = "UPDATE prices SET visible=FALSE WHERE id=:pid;"
 
 close_station = "UPDATE stations SET operational = FALSE WHERE id=:stid;"
+
+open_station = "UPDATE stations SET operational = TRUE WHERE id=:stid;"
 
 ban_user = "UPDATE users SET visible = FALSE WHERE id=:uid;"
 

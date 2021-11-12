@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block title %}{{ station.station_name}}{% endblock %}
+{% block content%}
+<div class="content">
+  <div class="text-content">
+
+    <h2>{{ station.station_name }}</h2>
+    <p>{{ station }}</p>
+    
+
+  
+{% if session.role == "admin" %}
+
+<form action="/station/{{station.id}}/update" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+  <p>
+    Vanha nimi: {{station.station_name}}<br>
+
+    Uusi nimi: <input type="text" name="station_name" value="{{station.station_name}}" required>
+  </p>
+  <p>
+    Vanha osoite: {{station.addr}}<br>
+
+    Uusi osoite: <input type="text" name="address" value="{{station.addr}}" required>
+  </p>
+  <p>
+    Vanha nimi: {{station.city}}<br>
+
+    Uusi nimi: <input type="text" name="city" value="{{station.city}}" required>
+  </p>
+  <p>
+    Vanha postinumero: {{station.postnr}}<br>
+
+    Uusi postinumero: <input type="text" name="postnr" value="{{station.postnr}}" required>
+  </p>
+  <p>
+    Vanha tie: {{station.road}}<br>
+
+    Uusi tie: <input type="text" name="road" value="{{station.road}}" required>
+  </p>
+
+  <p>
+    <input type="submit" name="Muuta">
+  </p>
+</form>
+{% endif %}
+</div>
+</div>
+{% endblock %}

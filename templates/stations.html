@@ -19,17 +19,13 @@
             {% for station in stations %}
     <tr>
         <td>{{ station[0] }}</td>
-        <td><a href="/station/{{ station[0] }}">{{ station[1] }} </a></td>
+        <td><a href="/station/{{ station[0] }}">{{ station[1] }}</a></td>
         <td>{{ station[2] }}</td>
         <td>{{ station[4] }}</td>
         <td>{{ station[3] }}</td>
-        <td>
-            {% if station[5] != "0" %}
-            {{ station[5] }}
-            {% endif %}
+        <td>{% if station[5] != "0" %}{{ station[5] }}{% endif %}
         </td>
     </tr>
-    
     {% endfor %}
 </table>
 </div>

@@ -18,6 +18,11 @@ def add_station(name, address, city, postnr, road):
     db.session.execute(q.add_station, {"name":name, "address":address,"city":city, "postnr":postnr, "road":road})
     db.session.commit()
 
+def update_station(id, name, address, city, postnr, road):
+    db.session.execute(q.update_station, {"id":id, "name":name, "address":address,"city":city, "postnr":postnr, "road":road})
+    print("päivitetty asemaa")
+    db.session.commit()
+
 def hide_price(price_id):
     print("piilotetaan havainto", price_id)
     db.session.execute(q.hide_price, {"pid":price_id})
@@ -26,6 +31,11 @@ def hide_price(price_id):
 def close_station(station_id):
     print("suljetaan asema",station_id)
     db.session.execute(q.close_station, {"stid":station_id})
+    db.session.commit()
+
+def open_station(station_id):
+    print("avataan asema",station_id)
+    db.session.execute(q.open_station, {"stid":station_id})
     db.session.commit()
 
 def ban_user(user_id):

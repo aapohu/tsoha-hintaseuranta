@@ -42,11 +42,25 @@
   </table>
   
 {% if session.role == "admin" %}
+<p><a href="/station/{{station.id}}/update">Muokkaa asemaa</a></p>
+
+{% if station.operational == True %}
 <form action="/station/{{station.id}}" method="POST">
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-  <input type="hidden" name=station_id value="{{ station.id }}">
-  <input type="submit" value="SULJE ASEMA">
+  <input type="hidden" name="station_id" value="{{ station.id }}">
+  <input type="hidden" name="action" value="close">
+  <input type="submit" value="SULJE ASEMA" onclick="return confirm('Sulje asema?')">
 </form>
+{% else %}
+<form action="/station/{{station.id}}" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+  <input type="hidden" name="station_id" value="{{ station.id }}">
+  <input type="hidden" name="action" value="open">
+  <input type="submit" value="Avaa asema" onclick="return confirm('Avaa asema uudelleen?')">
+</form>
+{% endif %}
+
+
 {% endif %}
 </div>
 </div>

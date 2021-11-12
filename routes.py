@@ -171,7 +171,6 @@ def search():
         results = db.search_area(form, search)
         return flask.render_template("search.html", roads=roads, cities=cities, postnrs=postnrs, results = results)
 
-
 @app.route("/stats")
 def stats():
     mly = db.get_avg_monthly()
@@ -181,10 +180,11 @@ def stats():
     monthlyf = chk.check_table(mly)
     return flask.render_template("stats.html", daily=dailyf, monthly=monthlyf, today=todayf)
 
-@app.route("/station/<int:id>", methods=["GET","POST"])
+@app.route("/station/<int:id>", methods=["GET", "POST"])
 def station(id):
+    station_id = int(id)
+
     if flask.request.method == "GET":
-        station_id = int(id)
         station = db.get_station_info(station_id)
         prices = db.get_station_prices(station_id)
         return flask.render_template("station.html", station=station, prices=prices)
@@ -194,10 +194,36 @@ def station(id):
             if flask.request.form["csrf_token"] != flask.session["csrf_token"]:
                 return flask.render_template("error.html", message="csrf token error")
 
-            station_id = flask.request.form["station_id"]
-            db.close_station(station_id)
-            return flask.redirect("/station/"+station_id)
+            if flask.request.form["action"] == "close":
+                db.close_station(station_id)
+
+            if flask.request.form["action"] == "open":
+                db.open_station(station_id)
+
+            return flask.redirect("/station/"+str(station_id))
+
         return flask.redirect("/")
+
+
+@app.route("/station/<int:id>/update", methods=["GET", "POST"])
+def stationupdate(id):
+        station_id = int(id)
+        if flask.request.method == "GET":
+            station = db.get_station_info(station_id)
+            return flask.render_template("stationupdate.html", station=station)
+
+        if flask.request.method == "POST" and flask.session["role"] == "admin":
+            if flask.request.form["csrf_token"] != flask.session["csrf_token"]:
+                return flask.render_template("error.html", message="csrf token error")
+
+            st_name = flask.request.form["station_name"]
+            st_address = flask.request.form["address"]
+            st_city = flask.request.form["city"]
+            st_postnr = flask.request.form["postnr"]
+            st_road = flask.request.form["road"]
+            db.update_station(station_id, st_name, st_address, st_city, st_postnr, st_road)
+
+            return flask.redirect("/station/"+str(station_id))
 
 @app.route("/price/<int:id>", methods=["GET", "POST"])
 def price(id):
