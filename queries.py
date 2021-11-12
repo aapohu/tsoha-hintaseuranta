@@ -65,7 +65,8 @@ get_avg_today = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3), \
                         FROM prices \
                         WHERE visible = TRUE AND date_trunc('day', time) = CURRENT_DATE;"
 
-get_avg_daily = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1_avg,\
+get_avg_daily = "SELECT * \
+                FROM (SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1_avg,\
                         ROUND(AVG(NULLIF(type2_price, 0.0))::numeric,3) AS type2_avg,\
                         ROUND(AVG(NULLIF(type3_price, 0.0))::numeric,3) AS type3_avg,\
                         ROUND(AVG(NULLIF(type4_price, 0.0))::numeric,3) AS type4_avg,\
@@ -73,9 +74,11 @@ get_avg_daily = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1
                         FROM prices WHERE visible = TRUE \
                         GROUP BY date_trunc('day', time) \
                         ORDER BY date DESC\
-                        LIMIT 30;"
+                        LIMIT 30;) AS daily\
+                ORDER BY daily.date ASC;"
 
-get_avg_monthly = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1_avg, \
+get_avg_monthly = "SELECT * \
+                FROM (SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS type1_avg, \
                     ROUND(AVG(NULLIF(type2_price, 0.0))::numeric,3) AS type2_avg, \
                     ROUND(AVG(NULLIF(type3_price, 0.0))::numeric,3) AS type3_avg, \
                     ROUND(AVG(NULLIF(type4_price, 0.0))::numeric,3) AS type4_avg, \
@@ -83,7 +86,8 @@ get_avg_monthly = "SELECT ROUND(AVG(NULLIF(type1_price, 0.0))::numeric,3) AS typ
                     FROM prices WHERE visible = TRUE \
                     GROUP BY date_trunc('month', time) \
                     ORDER BY date DESC\
-                    LIMIT 24;"
+                    LIMIT 24) AS monthly\
+                ORDER BY monthly.date ASC;"
 
 is_admin = "SELECT COUNT(*)\
            FROM admin_users A, users U \
