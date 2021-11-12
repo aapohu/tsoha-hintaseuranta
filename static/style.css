@@ -100,15 +100,14 @@ h2{
 }
 
 .content {
-    margin-left:200px;
+    margin-left:20vw;
     height:100vh;
 }
 
 .text-content {
-    width: 70vw;
+    width: 80%;
     text-align: left;
     margin: 0 auto;
-    width: 80%;
     padding: 10px 25px;
     border: 1px solid #A7A7A7;
     margin: 0 0 1px 0;
